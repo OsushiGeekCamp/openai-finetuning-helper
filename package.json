@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prepare": "husky install",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -20,6 +21,7 @@
     "autoprefixer": "^10",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
+    "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "postcss": "^8",
     "prettier": "^3.0.3",
