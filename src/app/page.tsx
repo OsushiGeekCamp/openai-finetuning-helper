@@ -51,52 +51,32 @@ const Home = () => {
     <div className='bg-white dark:bg-gray-800 min-h-screen'>
       <div className="p-8">
         <h1 className="text-2xl font-bold mb-4">FileList</h1>
+        <div className='overflow-x-auto'>
         <table className='min-w-full bg-white shadow-md rounded-md'>
           <thead className='bg-gray-800 text-white'>
             <tr>
-              <th className='w-1/4 py-2'>File-id</th>
-              <th className='w-1/4 py-2'>
-                object
-              </th>
-              <th className='w-1/4 py-2'>
-                bytes
-              </th>
-              <th className='w-1/4 py-2'>
-                created_at
-              </th>
-              <th className='w-1/4 py-2'>
-                filename
-              </th>
-              <th className='w-1/4 py-2'>
-                purpose
-              </th>
+              <th className='sticky top-0 w-1/4 bg-gray-800 text-white py-2 text-left'>File-id</th>
+              <th className='w-1/4 py-2 text-left'>object</th>
+              <th className='w-1/4 py-2 text-left'>bytes</th>
+              <th className='w-1/4 py-2 text-left'>created_at</th>
+              <th className='w-1/4 py-2 text-left'>filename</th>
+              <th className='w-1/4 py-2 text-left'>purpose</th>
             </tr>
           </thead>
           <tbody>
             {jsonData.data.map((item, index) => (
               <tr key={index} className='text-gray-700 border-t'>
-                <td className='py-2 px-4'>
-                  {item.id}
-                </td>
-                <td className='py-2 px-4'>
-                  {item.object}
-                </td>
-                <td className='py-2 px-4'>
-                  {item.bytes}
-                </td>
-                <td className='py-2 px-4'>
-                  {new Date(item.created_at * 1000).toLocaleString()}
-                </td>
-                <td className='py-2 px-4'>
-                  {item.filename}
-                </td>
-                <td className='py-2 px-4'>
-                  {item.purpose}
-                </td>
+                <td className='py-2 px-4 text-left border'>{item.id}</td>
+                <td className='py-2 px-4 text-left border'>{item.object}</td>
+                <td className='py-2 px-4 text-left border'>{item.bytes}</td>
+                <td className='py-2 px-4 text-left border'>{new Date(item.created_at * 1000).toLocaleString()}</td>
+                <td className='py-2 px-4 text-left border'>{item.filename}</td>
+                <td className='py-2 px-4 text-left border'>{item.purpose}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
