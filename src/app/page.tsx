@@ -1,9 +1,9 @@
 import React from "react";
-import { fetchFiles } from '@/api';
+import { fetchFiles } from '@/utils/api';
 
-export default function Home() {
-  const fs = require("fs");
-  const jsonData = JSON.parse(fetchFiles);
+
+const Home = async () => {
+  const jsonData = await fetchFiles();
   // const jsonData = JSON.parse(fs.readFileSync('./src/app/example.json'));
 
   return (
@@ -20,7 +20,7 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {jsonData.data.map((item, index) => (
+          {jsonData.data.map((item:any, index:any) => (
             <tr key={index}>
               <td className="py-2 px-4 border-b border-gray-200 text-left">{item.id}</td>
               <td className="py-2 px-4 border-b border-gray-200 text-left">{item.object}</td>
@@ -35,3 +35,4 @@ export default function Home() {
     </div>
   );
 }
+export default Home;
