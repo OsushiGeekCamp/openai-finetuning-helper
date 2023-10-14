@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { fetchFiles } from '@/utils/api';
+import Loading from '@/components/loading';
 
 type File = {
   id: string;
@@ -36,11 +37,17 @@ const Home = () => {
   }, []);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className='bg-white dark:bg-gray-800 min-h-screen'>
+        <div className='flex flex-col justify-center items-center h-screen'>
+          <h1 className='text-2xl font-semibold'>{error}</h1>
+        </div>
+      </div>
+    );
   }
 
   if (!jsonData) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   // const jsonData = JSON.parse(fs.readFileSync('./src/app/example.json'));
 
