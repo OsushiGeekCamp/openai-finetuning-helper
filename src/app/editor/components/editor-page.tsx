@@ -73,11 +73,13 @@ const EditorPage = ({
         examplesLength={examples.length}
       />
       <main className='container mx-auto pt-0 pr-4 pb-4 pl-4'>
-        <ToggleSwitch
-          checked={showFirstMessage}
-          onChange={setShowFirstMessage}
-          label='Set default first message'
-        />
+        <div className='ml-1'>
+          <ToggleSwitch
+            checked={showFirstMessage}
+            onChange={setShowFirstMessage}
+            label='Set default first message'
+          />
+        </div>
         {showFirstMessage && (
           <div className='mb-4'>
             <MessageForm
@@ -102,7 +104,7 @@ const EditorPage = ({
         />
         <Button
           onClick={addNewExample}
-          className='bg-green-500 text-white dark:bg-green-700 hover:bg-green-600 active:bg-green-700'
+          className='bg-green-500 ml-1 text-white dark:bg-green-700 hover:bg-green-600 active:bg-green-700'
           ariaLabel='Add New Example'
         >
           Add New Example
