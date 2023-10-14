@@ -43,7 +43,7 @@ const MessageList = ({
         ariaLabel={`Message ${messageIndex + 1} in Example ${exampleIndex + 1}`}
       />
     ))}
-    <div className='flex flex-col'>
+    <div className='flex flex-col my-1'>
       <Button
         onClick={() => addMessageToExample(exampleIndex)}
         className='h-1/2 bg-blue-500 text-white dark:bg-blue-700 hover:bg-blue-600 active:bg-blue-700 mb-2'
