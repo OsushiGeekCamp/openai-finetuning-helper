@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { fetchFiles } from '@/utils/api';
+import exampleData from '@/app/example.json';
 
 type FileDataType = {
   data: {
@@ -14,10 +15,10 @@ type FileDataType = {
 };
 
 const Home = () => {
-  const [jsonData, setJsonData] = useState<FileDataType | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  //const [jsonData, setJsonData] = useState<FileDataType | null>(null);
+  //const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await fetchFiles('');
@@ -31,7 +32,12 @@ const Home = () => {
       }
     };
     fetchData();
-  }, []);
+  }, []); */
+
+  //デバック用  本番は上記を使用
+
+  const [jsonData, setJsonData] = useState<FileDataType | null>(exampleData);
+  const [error, setError] = useState<string | null>(null);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -40,7 +46,6 @@ const Home = () => {
   if (!jsonData) {
     return <div>Loading...</div>;
   }
-  // const jsonData = JSON.parse(fs.readFileSync('./src/app/example.json'));
 
   return (
     <div className='bg-white dark:bg-gray-800 min-h-screen'>
