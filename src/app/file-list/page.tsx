@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { fetchFiles } from '@/utils/api';
 import Loading from '@/components/loading';
@@ -17,8 +18,8 @@ type Response = {
 };
 
 const FileListPage = () => {
-  const [jsonData, setJsonData] = useState<Response | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [jsonData, setJsonData] = useState<Response>();
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +50,6 @@ const FileListPage = () => {
   if (!jsonData) {
     return <Loading />;
   }
-  // const jsonData = JSON.parse(fs.readFileSync('./src/app/example.json'));
 
   return (
     <div className='bg-white dark:bg-gray-800 min-h-screen'>
@@ -102,4 +102,5 @@ const FileListPage = () => {
     </div>
   );
 };
+
 export default FileListPage;
