@@ -20,6 +20,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange, label })
             checked={checked}
             onChange={(e) => onChange(e.target.checked)}
             className='sr-only'
+            aria-labelledby='toggle-label'
           />
           <div
             className={`block w-10 h-6 rounded-full ${checked ? 'bg-green-500' : 'bg-gray-400'
