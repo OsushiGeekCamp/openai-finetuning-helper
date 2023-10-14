@@ -49,52 +49,55 @@ const Home = () => {
 
   return (
     <div className='bg-white dark:bg-gray-800 min-h-screen'>
-      <table className='min-w-full bg-white'>
-        <thead>
-          <tr>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>id</th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              object
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              bytes
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              created_at
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              filename
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              purpose
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {jsonData.data.map((item, index) => (
-            <tr key={index}>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.id}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.object}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.bytes}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.created_at}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.filename}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.purpose}
-              </td>
+      <div className="p-8">
+        <h1 className="text-2xl font-bold mb-4">FileList</h1>
+        <table className='min-w-full bg-white shadow-md rounded-md'>
+          <thead className='bg-gray-800 text-white'>
+            <tr>
+              <th className='w-1/4 py-2'>File-id</th>
+              <th className='w-1/4 py-2'>
+                object
+              </th>
+              <th className='w-1/4 py-2'>
+                bytes
+              </th>
+              <th className='w-1/4 py-2'>
+                created_at
+              </th>
+              <th className='w-1/4 py-2'>
+                filename
+              </th>
+              <th className='w-1/4 py-2'>
+                purpose
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {jsonData.data.map((item, index) => (
+              <tr key={index} className='text-gray-700 border-t'>
+                <td className='py-2 px-4'>
+                  {item.id}
+                </td>
+                <td className='py-2 px-4'>
+                  {item.object}
+                </td>
+                <td className='py-2 px-4'>
+                  {item.bytes}
+                </td>
+                <td className='py-2 px-4'>
+                  {new Date(item.created_at * 1000).toLocaleString()}
+                </td>
+                <td className='py-2 px-4'>
+                  {item.filename}
+                </td>
+                <td className='py-2 px-4'>
+                  {item.purpose}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
