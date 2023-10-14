@@ -33,7 +33,7 @@ const ToggleSwitch = ({ checked, onChange, label }: ToggleSwitchProps) => {
             }`}
           ></div>
         </div>
-        <span className='ml-3 text-gray-700'>{label}</span>
+        <span className='ml-3 text-gray-700 dark:text-gray-300'>{label}</span>
       </label>
     </div>
   );
