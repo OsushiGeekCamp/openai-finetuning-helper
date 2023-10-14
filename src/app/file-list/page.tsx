@@ -16,7 +16,7 @@ type Response = {
   data: File[];
 };
 
-const Home = () => {
+const FileListPage = () => {
   const [jsonData, setJsonData] = useState<Response | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -102,4 +102,4 @@ const Home = () => {
     </div>
   );
 };
-export default Home;
+export default FileListPage;
