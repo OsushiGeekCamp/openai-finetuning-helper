@@ -17,7 +17,7 @@ type Response = {
   data: File[];
 };
 
-const FileListPage = () => {
+const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
 
@@ -37,70 +37,62 @@ const FileListPage = () => {
     fetchData();
   }, []);
 
-  if (error) {
-    return (
-      <div className='bg-white dark:bg-gray-800 min-h-screen'>
-        <div className='flex flex-col justify-center items-center h-screen'>
-          <h1 className='text-2xl font-semibold'>{error}</h1>
-        </div>
-      </div>
-    );
-  }
+  //デバック用  本番は上記を使用
 
-  if (!jsonData) {
-    return <Loading />;
-  }
+  // const [jsonData, setJsonData] = useState<FileDataType | null>(exampleData);
+  // const [error, setError] = useState<string | null>(null);
+
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
+
+  // if (!jsonData) {
+  //   return <Loading />;
+  // }
 
   return (
     <div className='bg-white dark:bg-gray-800 min-h-screen'>
-      <table className='min-w-full bg-white'>
-        <thead>
-          <tr>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>id</th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              object
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              bytes
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              created_at
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              filename
-            </th>
-            <th className='py-2 px-4 border-b border-gray-200 text-left'>
-              purpose
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {jsonData.data.map((item, index) => (
-            <tr key={index}>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.id}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.object}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.bytes}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.created_at}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.filename}
-              </td>
-              <td className='py-2 px-4 border-b border-gray-200 text-left'>
-                {item.purpose}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className='p-8'>
+        <h1 className='text-2xl font-bold mb-4'>FileList</h1>
+        <div className='overflow-x-auto'>
+          <table className='min-w-full bg-white shadow-md rounded-md'>
+            <thead className='bg-gray-800 text-white'>
+              <tr>
+                <th className='sticky top-0 w-1/4 bg-gray-800 text-white py-2 text-left'>
+                  File-id
+                </th>
+                <th className='w-1/4 py-2 text-left'>object</th>
+                <th className='w-1/4 py-2 text-left'>bytes</th>
+                <th className='w-1/4 py-2 text-left'>created_at</th>
+                <th className='w-1/4 py-2 text-left'>filename</th>
+                <th className='w-1/4 py-2 text-left'>purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              {jsonData &&
+                jsonData.data.map((item, index) => (
+                  <tr key={index} className='text-gray-700 border-t'>
+                    <td className='py-2 px-4 text-left border'>{item.id}</td>
+                    <td className='py-2 px-4 text-left border'>
+                      {item.object}
+                    </td>
+                    <td className='py-2 px-4 text-left border'>{item.bytes}</td>
+                    <td className='py-2 px-4 text-left border'>
+                      {new Date(item.created_at * 1000).toLocaleString()}
+                    </td>
+                    <td className='py-2 px-4 text-left border'>
+                      {item.filename}
+                    </td>
+                    <td className='py-2 px-4 text-left border'>
+                      {item.purpose}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
-
-export default FileListPage;
+export default FileList;
