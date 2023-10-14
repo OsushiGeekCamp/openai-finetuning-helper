@@ -2,19 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFiles } from '@/utils/api';
 
-type FileDataType = {
-  data: {
-    id: string;
-    object: string;
-    bytes: number;
-    created_at: number;
-    filename: string;
-    purpose: string;
-  }[];
+type File = {
+  id: string;
+  object: string;
+  bytes: number;
+  created_at: number;
+  filename: string;
+  purpose: string;
+};
+
+type Response = {
+  data: File[];
 };
 
 const Home = () => {
-  const [jsonData, setJsonData] = useState<FileDataType | null>(null);
+  const [jsonData, setJsonData] = useState<Response | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
