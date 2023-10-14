@@ -34,7 +34,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
   };
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col m-1'>
       <div className='flex flex-row justify-between mb-2'>
         <select
           value={role}
