@@ -21,40 +21,43 @@ type Response = {
 const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
-  const openai_api_key = '';
 
   useEffect(() => {
     const fetchData = async () => {
-      const openaiApiKey: string | null = getApiKey(); // Get the API key using getApiKey function
-      if (openaiApiKey !== null) {
-        try {
-          const result = await fetchFiles(openaiApiKey);
-          setJsonData(result);
-        } catch (err) {
-          if (err instanceof Error) {
-            setError(err.message);
-          } else {
-            setError('An unknown error occurred');
-          }
-        }
-      } else {
+      const openaiApiKey = getApiKey();
+      if (openaiApiKey === null) {
         setError('API key is null');
+        return;
+      }
+      try {
+        const result = await fetchFiles(openaiApiKey);
+        setJsonData(result);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       }
     };
     fetchData();
   }, []);
 
   const handleQuickStart = async (fileId: string) => {
+    const openaiApiKey = getApiKey();
+    if (openaiApiKey === null) {
+      setError('API key is null');
+      return;
+    }
     const requestBody = {
       training_file: fileId,
       model: 'gpt-3.5-turbo',
     };
-
     const response = await fetch('https://api.openai.com/v1/fine_tuning/jobs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${openai_api_key}`,
+        Authorization: `Bearer ${openaiApiKey}`,
       },
       body: JSON.stringify(requestBody),
     });
