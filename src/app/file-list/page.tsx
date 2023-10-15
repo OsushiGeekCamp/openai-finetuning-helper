@@ -20,12 +20,11 @@ type Response = {
 const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
-  const openai_api_key = '';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchFiles(openai_api_key);
+        const result = await fetchFiles('');
         setJsonData(result);
       } catch (err) {
         if (err instanceof Error) {
@@ -38,31 +37,18 @@ const FileList = () => {
     fetchData();
   }, []);
 
-  const handleQuickStart = async (fileId: string) => {
-    const requestBody = {
-      training_file: fileId,
-      model: 'gpt-3.5-turbo',
-    };
+  //デバック用  本番は上記を使用
 
-    const response = await fetch('https://api.openai.com/v1/fine_tuning/jobs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${openai_api_key}`,
-      },
-      body: JSON.stringify(requestBody),
-    });
+  // const [jsonData, setJsonData] = useState<FileDataType | null>(exampleData);
+  // const [error, setError] = useState<string | null>(null);
 
-    // TODO: Handle the response as required.
-  };
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!jsonData) {
-    return <Loading />;
-  }
+  // if (!jsonData) {
+  //   return <Loading />;
+  // }
 
   return (
     <div className='bg-white dark:bg-gray-800 min-h-screen'>
@@ -80,8 +66,6 @@ const FileList = () => {
                 <th className='w-1/4 py-2 text-left'>created_at</th>
                 <th className='w-1/4 py-2 text-left'>filename</th>
                 <th className='w-1/4 py-2 text-left'>purpose</th>
-                <th className='w-1/4 py-2 text-left'>Quick Start</th>{' '}
-                {/* Added column for Quick Start button */}
               </tr>
             </thead>
             <tbody>
@@ -102,14 +86,6 @@ const FileList = () => {
                     <td className='py-2 px-4 text-left border'>
                       {item.purpose}
                     </td>
-                    <td className='py-2 px-4 text-left border'>
-                      <button
-                        onClick={() => handleQuickStart(item.id)}
-                        className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue'
-                      >
-                        Quick Start
-                      </button>
-                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -119,5 +95,4 @@ const FileList = () => {
     </div>
   );
 };
-
 export default FileList;
