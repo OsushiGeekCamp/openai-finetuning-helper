@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import ToggleSwitch from '@/components/toggle-switch'; // トグルスイッチコンポーネントをインポート
+import { getApiKey } from '@/utils/openai';
 
 interface JobEvent {
   id: string;
@@ -15,21 +16,22 @@ interface JobDetails {
   filename?: string; // filename属性を追加
 }
 
+const openaiApiKey: string = ''; // APIキーを格納する変数を定義
+
 const FineTuningJobsPage = () => {
   const [jobs, setJobs] = useState<JobDetails[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobDetails[]>([]);
   const [isFiltered, setIsFiltered] = useState(false); // フィルタリングが有効かどうかをトラックするstate
 
-  const openai_api_key = '';
-
   useEffect(() => {
     const fetchJobs = async () => {
       try {
+        const openaiApiKey = getApiKey(); // Get the API key using getApiKey function
         const response = await fetch(
           'https://api.openai.com/v1/fine_tuning/jobs',
           {
             headers: {
-              Authorization: `Bearer ${openai_api_key}`,
+              Authorization: `Bearer ${openaiApiKey}`,
             },
           },
         );
@@ -39,7 +41,7 @@ const FineTuningJobsPage = () => {
         const jobDetailsPromises = jobEvents.map((event) =>
           fetch(`https://api.openai.com/v1/fine_tuning/jobs/${event.id}`, {
             headers: {
-              Authorization: `Bearer ${openai_api_key}`,
+              Authorization: `Bearer ${openaiApiKey}`,
             },
           }).then((res) => res.json()),
         );
@@ -49,7 +51,7 @@ const FineTuningJobsPage = () => {
         const filenamesPromises = fetchedJobs.map((job) =>
           fetch(`https://api.openai.com/v1/files/${job.training_file}`, {
             headers: {
-              Authorization: `Bearer ${openai_api_key}`,
+              Authorization: `Bearer ${openaiApiKey}`,
             },
           }).then((res) => res.json()),
         );
@@ -70,7 +72,7 @@ const FineTuningJobsPage = () => {
     };
 
     fetchJobs();
-  }, [openai_api_key]);
+  }, []);
 
   useEffect(() => {
     setFilteredJobs(jobs);
