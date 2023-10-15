@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, useState } from 'react';
+import { useReducer, useState, useEffect } from 'react';
 
 import { copyToClipboard } from '@/utils/clipboard';
 import { Example } from '@/types/example';
@@ -43,7 +43,6 @@ const EditorPageContainer = ({
   fileName: initialFileName,
   dataset,
 }: EditorPageContainerProps) => {
-  apiKey = getApiKey(); // Get the API key using getApiKey function
   const [fileName, setFileName] = useState(initialFileName ?? '');
   const [examples, dispatchExamples] = useReducer(
     examplesReducer,
@@ -52,7 +51,9 @@ const EditorPageContainer = ({
   const [showFirstMessage, setShowFirstMessage] = useState(true);
   const [defaultFirstRole, setDefaultFirstRole] = useState(defaultRole);
   const [defaultFirstMessage, setDefaultFirstMessage] = useState('');
-
+  useEffect(() => {
+    const apiKey = getApiKey(); // Get the API key using getApiKey function
+  }, []);
   const isUploadDisabled = !apiKey?.trim() || !fileName.trim();
 
   const examplesToJsonl = () => {
