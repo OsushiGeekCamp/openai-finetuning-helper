@@ -72,7 +72,7 @@ const FineTuningJobsPage = () => {
     };
 
     fetchJobs();
-  }, [openaiApiKey]);
+  }, []);
 
   useEffect(() => {
     setFilteredJobs(jobs);
