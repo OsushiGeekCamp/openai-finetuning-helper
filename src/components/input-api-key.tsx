@@ -2,7 +2,7 @@
 // UseClient.tsx
 
 import React, { useState, useEffect } from 'react';
-import { saveApiKey, getApiKey } from '@/utils/api';
+import { saveApiKey, getApiKey } from '@/utils/openai';
 
 const InputApiKey: React.FC = () => {
   const [inputValue, setInputValue] = useState('');

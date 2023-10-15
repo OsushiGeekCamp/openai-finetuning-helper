@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { fetchFiles } from '@/utils/api';
+import { fetchFiles } from '@/utils/openai';
 import Loading from '@/components/loading';
 
 type File = {
