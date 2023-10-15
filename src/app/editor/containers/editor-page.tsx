@@ -33,13 +33,13 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
 };
 
 interface EditorPageContainerProps {
-  apiKey?: string | null;
+  openaiApiKey?: string | null;
   fileName?: string;
   dataset?: string;
 }
 
 const EditorPageContainer = ({
-  apiKey,
+  openaiApiKey,
   fileName: initialFileName,
   dataset,
 }: EditorPageContainerProps) => {
@@ -52,9 +52,9 @@ const EditorPageContainer = ({
   const [defaultFirstRole, setDefaultFirstRole] = useState(defaultRole);
   const [defaultFirstMessage, setDefaultFirstMessage] = useState('');
   useEffect(() => {
-    const apiKey = getApiKey(); // Get the API key using getApiKey function
+    const openaiApiKey = getApiKey(); // Get the API key using getApiKey function
   }, []);
-  const isUploadDisabled = !apiKey?.trim() || !fileName.trim();
+  const isUploadDisabled = !openaiApiKey?.trim() || !fileName.trim();
 
   const examplesToJsonl = () => {
     return examples
@@ -107,7 +107,7 @@ const EditorPageContainer = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${openaiApiKey}`,
         },
         body: formData,
       });
