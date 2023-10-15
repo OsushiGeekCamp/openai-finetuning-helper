@@ -21,7 +21,7 @@ jobs:
     - name: Try merging to debug branch
       run: |
         git fetch origin
-        git checkout debug
+        git checkout -b debug origin/debug
         if git merge main --ff-only; then
           git push origin debug
         else
