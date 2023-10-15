@@ -10,7 +10,6 @@ import { getApiKey } from '@/utils/openai'; // Get the API key using getApiKey f
 
 import { examplesReducer } from '../reducers/examples';
 import EditorPage from '../components/editor-page';
-import { get } from 'http';
 const examplesFromJsonl = (jsonl?: string) => {
   const defaultExamples: Example[] = [
     { messages: [{ role: defaultRole, content: '' }] },
