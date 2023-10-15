@@ -6,6 +6,7 @@ import { copyToClipboard } from '@/utils/clipboard';
 import { Example } from '@/types/example';
 import { Message } from '@/types/message';
 import { defaultRole } from '@/types/role';
+import { getApiKey } from '@/utils/openai'; // Get the API key using getApiKey function
 
 import { examplesReducer } from '../reducers/examples';
 import EditorPage from '../components/editor-page';
@@ -32,7 +33,7 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
 };
 
 interface EditorPageContainerProps {
-  apiKey?: string;
+  apiKey?: string | null;
   fileName?: string;
   dataset?: string;
 }
@@ -42,6 +43,7 @@ const EditorPageContainer = ({
   fileName: initialFileName,
   dataset,
 }: EditorPageContainerProps) => {
+  apiKey = getApiKey(); // Get the API key using getApiKey function
   const [fileName, setFileName] = useState(initialFileName ?? '');
   const [examples, dispatchExamples] = useReducer(
     examplesReducer,

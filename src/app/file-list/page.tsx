@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFiles } from '@/utils/openai';
 import Loading from '@/components/loading';
+import { getApiKey } from '@/utils/openai';
 
 type File = {
   id: string;
@@ -23,15 +24,20 @@ const FileList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const result = await fetchFiles('');
-        setJsonData(result);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred');
+      const openaiApiKey: string | null = getApiKey(); // Get the API key using getApiKey function
+      if (openaiApiKey !== null) {
+        try {
+          const result = await fetchFiles(openaiApiKey);
+          setJsonData(result);
+        } catch (err) {
+          if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError('An unknown error occurred');
+          }
         }
+      } else {
+        setError('API key is null');
       }
     };
     fetchData();
