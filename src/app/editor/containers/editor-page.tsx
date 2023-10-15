@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, useState, useEffect } from 'react';
+import { useReducer, useState } from 'react';
 
 import { copyToClipboard } from '@/utils/clipboard';
 import { Example } from '@/types/example';
@@ -10,12 +10,11 @@ import { getApiKey } from '@/utils/openai'; // Get the API key using getApiKey f
 
 import { examplesReducer } from '../reducers/examples';
 import EditorPage from '../components/editor-page';
-
+import { get } from 'http';
 const examplesFromJsonl = (jsonl?: string) => {
   const defaultExamples: Example[] = [
     { messages: [{ role: defaultRole, content: '' }] },
   ];
-
   if (!jsonl) {
     return defaultExamples;
   }
@@ -27,19 +26,16 @@ const examplesFromJsonl = (jsonl?: string) => {
     return defaultExamples;
   }
 };
-
 const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
   event.preventDefault();
 };
 
 interface EditorPageContainerProps {
-  openaiApiKey?: string | null;
   fileName?: string;
   dataset?: string;
 }
 
 const EditorPageContainer = ({
-  openaiApiKey,
   fileName: initialFileName,
   dataset,
 }: EditorPageContainerProps) => {
@@ -51,10 +47,7 @@ const EditorPageContainer = ({
   const [showFirstMessage, setShowFirstMessage] = useState(true);
   const [defaultFirstRole, setDefaultFirstRole] = useState(defaultRole);
   const [defaultFirstMessage, setDefaultFirstMessage] = useState('');
-  useEffect(() => {
-    const openaiApiKey = getApiKey(); // Get the API key using getApiKey function
-  }, []);
-  const isUploadDisabled = !openaiApiKey?.trim() || !fileName.trim();
+  const isUploadDisabled = !getApiKey()?.trim() || !fileName.trim();
 
   const examplesToJsonl = () => {
     return examples
@@ -107,7 +100,7 @@ const EditorPageContainer = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${openaiApiKey}`,
+          Authorization: `Bearer ${getApiKey()}`,
         },
         body: formData,
       });
