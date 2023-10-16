@@ -9,6 +9,7 @@ jobs:
   try-merge-to-debug:
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       pull-requests: write
 
     steps:
