@@ -8,6 +8,8 @@ on:
 jobs:
   try-merge-to-debug:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
 
     steps:
     - name: Checkout code
