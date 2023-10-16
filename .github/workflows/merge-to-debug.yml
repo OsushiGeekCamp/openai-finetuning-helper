@@ -33,6 +33,7 @@ jobs:
               git push origin merge-main-to-debug
             else
               echo "NEED_CONFLICT_RESOLUTION_PR=true" >> $GITHUB_ENV
+              git push origin merge-main-to-debug
             fi
           fi
 
@@ -46,7 +47,6 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             -d "$PR_JSON" \
             https://api.github.com/repos/${{ github.repository }}/pulls
-
 
       - name: Create PR for Conflict Resolution
         if: env.NEED_CONFLICT_RESOLUTION_PR == 'true'
