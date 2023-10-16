@@ -29,15 +29,15 @@ jobs:
           else
             git checkout -b merge-main-to-debug
             if git merge main; then
-              echo "NEED_PR_FOR_MERGE_COMMIT=true" >> $GITHUB_ENV
+              echo "NEED_MERGE_COMMIT_PR=true" >> $GITHUB_ENV
               git push origin merge-main-to-debug
             else
-              echo "NEED_PR=true" >> $GITHUB_ENV
+              echo "NEED_CONFLICT_RESOLUTION_PR=true" >> $GITHUB_ENV
             fi
           fi
 
       - name: Create PR for Merge Commit
-        if: env.NEED_PR_FOR_MERGE_COMMIT == 'true'
+        if: env.NEED_MERGE_COMMIT_PR == 'true'
         run: |
           PR_JSON=$(echo -n '{"head":"merge-main-to-debug", "base":"debug", "title":"Merge main to debug", "body":"Main has been merged into debug with a merge commit."}')
           curl \
@@ -49,7 +49,7 @@ jobs:
 
 
       - name: Create PR for Conflict Resolution
-        if: env.NEED_PR == 'true'
+        if: env.NEED_CONFLICT_RESOLUTION_PR == 'true'
         run: |
           PR_JSON=$(echo -n '{"head":"merge-main-to-debug", "base":"debug", "title":"Conflict detected: Merge main to debug", "body":"There are merge conflicts that need manual resolution. Please review and resolve the conflicts."}')
           curl \
