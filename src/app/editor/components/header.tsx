@@ -32,7 +32,7 @@ const Header = ({
   copyToClipboardAsJsonl,
   examplesLength,
 }: HeaderProps) => (
-  <header className='container mx-auto sticky top-0 z-50 bg-white dark:bg-gray-800 p-4 flex justify-between items-center whitespace-nowrap'>
+  <header className='container mx-auto sticky top-0 z-50 bg-white dark:bg-gray-800 p-4 flex justify-between items-center whitespace-nowrap overflow-x-auto'>
     <div className='flex items-center'>
       <form onSubmit={handleFormSubmit}>
         <label className='sr-only' htmlFor='filenameInput'>
