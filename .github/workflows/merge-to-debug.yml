@@ -34,7 +34,6 @@ jobs:
               git push origin merge-main-to-debug
             else
               echo "NEED_CONFLICT_RESOLUTION_PR=true" >> $GITHUB_ENV
-              git push origin merge-main-to-debug
             fi
           fi
 
@@ -52,7 +51,7 @@ jobs:
       - name: Create PR for Conflict Resolution
         if: env.NEED_CONFLICT_RESOLUTION_PR == 'true'
         run: |
-          PR_JSON=$(echo -n '{"head":"merge-main-to-debug", "base":"debug", "title":"Conflict detected: Merge main to debug", "body":"There are merge conflicts that need manual resolution. Please review and resolve the conflicts."}')
+          PR_JSON=$(echo -n '{"head":"main", "base":"debug", "title":"Conflict detected: Merge main to debug", "body":"There are merge conflicts that need manual resolution. Please review and resolve the conflicts."}')
           curl \
             -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
