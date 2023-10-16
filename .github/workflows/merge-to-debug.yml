@@ -12,36 +12,49 @@ jobs:
       pull-requests: write
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Configure Git
-      run: |
-        git config user.name 'github-actions[bot]'
-        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Configure Git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
-    - name: Try merging to debug branch
-      run: |
-        git fetch origin
-        git checkout -b debug origin/debug
-        if git merge main --ff-only; then
-          git push origin debug
-        else
-          git checkout -b merge-main-to-debug
-          if git merge main; then
-            git push origin merge-main-to-debug
+      - name: Try merging to debug branch
+        run: |
+          git fetch origin
+          git checkout -b debug origin/debug
+          if git merge main --ff-only; then
+            git push origin debug
           else
-            echo "NEED_PR=true" >> $GITHUB_ENV
+            git checkout -b merge-main-to-debug
+            if git merge main; then
+              echo "NEED_MERGE_COMMIT_PR=true" >> $GITHUB_ENV
+              git push origin merge-main-to-debug
+            else
+              echo "NEED_CONFLICT_RESOLUTION_PR=true" >> $GITHUB_ENV
+              git push origin merge-main-to-debug
+            fi
           fi
-        fi
 
-    - name: Create PR if needed
-      if: env.NEED_PR == 'true'
-      run: |
-        PR_JSON=$(echo -n '{"head":"merge-main-to-debug", "base":"debug", "title":"Conflict detected: Merge main to debug", "body":"There are merge conflicts that need manual resolution. Please review and resolve the conflicts."}')
-        curl \
-          -X POST \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          -d "$PR_JSON" \
-          https://api.github.com/repos/${{ github.repository }}/pulls
+      - name: Create PR for Merge Commit
+        if: env.NEED_MERGE_COMMIT_PR == 'true'
+        run: |
+          PR_JSON=$(echo -n '{"head":"merge-main-to-debug", "base":"debug", "title":"Merge main to debug", "body":"Main has been merged into debug with a merge commit."}')
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "$PR_JSON" \
+            https://api.github.com/repos/${{ github.repository }}/pulls
+
+      - name: Create PR for Conflict Resolution
+        if: env.NEED_CONFLICT_RESOLUTION_PR == 'true'
+        run: |
+          PR_JSON=$(echo -n '{"head":"merge-main-to-debug", "base":"debug", "title":"Conflict detected: Merge main to debug", "body":"There are merge conflicts that need manual resolution. Please review and resolve the conflicts."}')
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "$PR_JSON" \
+            https://api.github.com/repos/${{ github.repository }}/pulls
