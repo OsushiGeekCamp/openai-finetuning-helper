@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 interface ApiKeyFormProps {
   inputValue: string;
   handleSubmit: () => void;
@@ -39,6 +41,16 @@ const ApiKeyForm = ({
           </button>
         </div>
       </form>
+      <p className='mb-2 text-sm text-gray-600 dark:text-gray-400 text-center'>
+        You can access the{' '}
+        <Link
+          href='/editor'
+          className='text-indigo-500 hover:underline dark:text-indigo-400 dark:hover:underline'
+        >
+          Editor
+        </Link>{' '}
+        page even without an API key.
+      </p>
       <p className='text-sm text-gray-600 dark:text-gray-400 text-center'>
         Your API key is stored locally and will not be sent to any external
         sources other than OpenAI.
