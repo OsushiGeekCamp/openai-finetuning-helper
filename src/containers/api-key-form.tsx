@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import ApiKeyForm from '@/components/api-key-form';
 import { saveApiKey, getApiKey } from '@/utils/openai';
 
 const ApiKeyFormContainer = () => {
+  const router = useRouter();
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -21,6 +23,7 @@ const ApiKeyFormContainer = () => {
 
   const handleSubmit = (): void => {
     saveApiKey(inputValue);
+    router.push('/file-list');
   };
 
   return (
