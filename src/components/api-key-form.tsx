@@ -1,10 +1,9 @@
 'use client';
-// UseClient.tsx
 
 import React, { useState, useEffect } from 'react';
 import { saveApiKey, getApiKey } from '@/utils/openai';
 
-const ApiKeyForm: React.FC = () => {
+const ApiKeyForm = () => {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -21,24 +20,43 @@ const ApiKeyForm: React.FC = () => {
   };
 
   const handleSubmit = (): void => {
-    saveApiKey(inputValue); // Save the API key when the button is clicked
+    saveApiKey(inputValue);
   };
 
   return (
-    <div className='flex min-h-screen flex-col items-center justify-between p-24'>
-      <input
-        type='text'
-        value={inputValue}
-        onChange={handleInputChange}
-        className='w-full p-2 border border-gray-300 rounded mb-4' // Added margin-bottom for spacing
-        placeholder='Enter your openAI API key'
-      />
-      <button
-        onClick={handleSubmit}
-        className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700'
+    <div className='bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md'>
+      <h2 className='mb-4 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100'>
+        Enter Your OpenAI API Key
+      </h2>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
       >
-        Submit
-      </button>
+        <div className='mb-4'>
+          <input
+            name='api-key'
+            type='password'
+            required
+            className='mt-1 p-2 w-full border dark:border-gray-700 rounded-md focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-300'
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+        </div>
+        <div className='mb-4'>
+          <button
+            type='submit'
+            className='w-full p-2 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:hover:bg-indigo-500'
+          >
+            Save API Key
+          </button>
+        </div>
+      </form>
+      <p className='text-sm text-gray-600 dark:text-gray-400 text-center'>
+        Your API key is stored locally and will not be sent to any external
+        sources other than OpenAI.
+      </p>
     </div>
   );
 };
