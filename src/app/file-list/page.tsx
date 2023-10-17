@@ -112,12 +112,14 @@ const FileList = () => {
                       {item.purpose}
                     </td>
                     <td className='py-2 px-4 text-left border'>
-                      <button
-                        onClick={() => handleQuickStart(item.id)}
-                        className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue'
-                      >
-                        Quick Start
-                      </button>
+                      {item.purpose === 'fine-tune' && (
+                        <button
+                          onClick={() => handleQuickStart(item.id)}
+                          className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue'
+                        >
+                          Quick Start
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
