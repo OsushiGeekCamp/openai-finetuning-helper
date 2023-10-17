@@ -1,26 +1,14 @@
-'use client';
+interface ApiKeyFormProps {
+  inputValue: string;
+  handleSubmit: () => void;
+  handleInputChange: (apiKey: string) => void;
+}
 
-import React, { useState, useEffect } from 'react';
-import { saveApiKey, getApiKey } from '@/utils/openai';
-
-const ApiKeyForm = () => {
-  const [inputValue, setInputValue] = useState('');
-
-  useEffect(() => {
-    const savedApiKey = getApiKey();
-    if (savedApiKey) {
-      setInputValue(savedApiKey);
-    }
-  }, []);
-
-  const handleInputChange = (newValue: string): void => {
-    setInputValue(newValue);
-  };
-
-  const handleSubmit = (): void => {
-    saveApiKey(inputValue);
-  };
-
+const ApiKeyForm = ({
+  inputValue,
+  handleSubmit,
+  handleInputChange,
+}: ApiKeyFormProps) => {
   return (
     <div className='bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md'>
       <h2 className='mb-4 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100'>
