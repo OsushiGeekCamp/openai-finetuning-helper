@@ -26,7 +26,7 @@ const MessageList = ({
   removeExample,
   exampleIndex,
 }: MessageListProps) => (
-  <div className='flex space-x-4'>
+  <div className='flex space-x-4 mb-1'>
     {messages.map((message, messageIndex) => (
       <MessageForm
         key={messageIndex}
