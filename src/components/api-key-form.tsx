@@ -41,7 +41,7 @@ const ApiKeyForm = () => {
             required
             className='mt-1 p-2 w-full border dark:border-gray-700 rounded-md focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-300'
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={handleInputChange}
           />
         </div>
         <div className='mb-4'>
