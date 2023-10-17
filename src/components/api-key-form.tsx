@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { saveApiKey, getApiKey } from '@/utils/openai';
 
-const InputApiKey: React.FC = () => {
+const ApiKeyForm: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -43,4 +43,4 @@ const InputApiKey: React.FC = () => {
   );
 };
 
-export default InputApiKey;
+export default ApiKeyForm;
