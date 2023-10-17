@@ -9,8 +9,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Validate Docker Compose
-      run: docker-compose -f docker-compose.yml config -q
+      - name: Validate Docker Compose
+        run: docker-compose -f docker-compose.yml config -q
