@@ -8,7 +8,7 @@ import { getApiKey } from '@/utils/openai';
 import SpecificFileEditorPage from '../components/specific-file-editor-page';
 
 const SpecificFileEditorPageContainer = () => {
-  const params = useParams<{ id: string }>();
+  const params = useParams();
   const router = useRouter();
 
   const [fileName, setFileName] = useState('');
@@ -68,6 +68,9 @@ const SpecificFileEditorPageContainer = () => {
   };
 
   useEffect(() => {
+    if (typeof params.id !== 'string') {
+      return;
+    }
     fetchData(params.id);
   }, [params.id]);
 
