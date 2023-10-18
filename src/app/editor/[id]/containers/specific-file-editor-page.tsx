@@ -75,7 +75,7 @@ const SpecificFileEditorPageContainer = () => {
     if (error) {
       router.push('/editor');
     }
-  }, [error]);
+  }, [router, error]);
 
   return <SpecificFileEditorPage fileName={fileName} dataset={dataset} />;
 };
