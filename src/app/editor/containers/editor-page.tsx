@@ -53,12 +53,11 @@ const EditorPageContainer = ({
 
   useEffect(() => {
     setApiKey(getApiKey()?.trim() ?? null);
-    checkUploadDisabled();
   }, []);
 
-  const checkUploadDisabled = () => {
-    setIsUploadDisabled(!apiKey || !fileName || examples.length === 0);
-  };
+  useEffect(() => {
+    setIsUploadDisabled(!apiKey || fileName.length === 0 || examples.length === 0);
+  }, [apiKey, fileName, examples]);
 
   const examplesToJsonl = () => {
     return examples
@@ -98,7 +97,6 @@ const EditorPageContainer = ({
 
   const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFileName(event.target.value.trim());
-    checkUploadDisabled();
   };
 
   async function handleUpload() {
