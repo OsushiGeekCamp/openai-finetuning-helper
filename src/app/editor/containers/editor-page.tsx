@@ -49,11 +49,15 @@ const EditorPageContainer = ({
   const [defaultFirstRole, setDefaultFirstRole] = useState(defaultRole);
   const [defaultFirstMessage, setDefaultFirstMessage] = useState('');
   const [apiKey, setApiKey] = useState<string | null>(null);
-  const isUploadDisabled = !apiKey || !fileName.trim();
+  const [isUploadDisabled, setIsUploadDisabled] = useState(false);
 
   useEffect(() => {
     setApiKey(getApiKey()?.trim() ?? null);
   }, []);
+
+  useEffect(() => {
+    setIsUploadDisabled(!apiKey || fileName.length === 0 || examples.length === 0);
+  }, [apiKey, fileName, examples]);
 
   const examplesToJsonl = () => {
     return examples
@@ -92,7 +96,7 @@ const EditorPageContainer = ({
   };
 
   const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFileName(event.target.value);
+    setFileName(event.target.value.trim());
   };
 
   async function handleUpload() {
