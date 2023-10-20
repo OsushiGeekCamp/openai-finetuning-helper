@@ -56,7 +56,6 @@ jobs:
           REPO_NAME: ${{ env.REPO_NAME }}
         run: |
           pnpm build
-          npx next export
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

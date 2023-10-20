@@ -55,4 +55,3 @@ jobs:
           REPO_NAME: ${{ env.REPO_NAME }}
         run: |
           pnpm build
-          npx next export
