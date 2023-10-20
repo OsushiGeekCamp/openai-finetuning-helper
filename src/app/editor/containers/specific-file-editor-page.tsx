@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import { getApiKey } from '@/utils/openai';
 
-import SpecificFileEditorPage from '../components/specific-file-editor-page';
+import SpecificFileEditorPage from '../[id]/components/specific-file-editor-page';
 
 const SpecificFileEditorPageContainer = () => {
   const params = useParams();
