@@ -32,7 +32,7 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
 };
 
 interface EditorPageContainerProps {
-  fileName?: string;
+  fileName: string;
   dataset?: string;
 }
 
@@ -40,7 +40,7 @@ const EditorPageContainer = ({
   fileName: initialFileName,
   dataset,
 }: EditorPageContainerProps) => {
-  const [fileName, setFileName] = useState(initialFileName ?? '');
+  const [fileName, setFileName] = useState(initialFileName);
   const [examples, dispatchExamples] = useReducer(
     examplesReducer,
     examplesFromJsonl(dataset),
