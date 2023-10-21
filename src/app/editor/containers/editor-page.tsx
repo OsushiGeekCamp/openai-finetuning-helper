@@ -56,7 +56,9 @@ const EditorPageContainer = ({
   }, []);
 
   useEffect(() => {
-    setIsUploadDisabled(!apiKey || fileName.length === 0 || examples.length === 0);
+    setIsUploadDisabled(
+      !apiKey || fileName.length === 0 || examples.length === 0,
+    );
   }, [apiKey, fileName, examples]);
 
   const examplesToJsonl = () => {
