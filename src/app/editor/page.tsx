@@ -1,7 +1,7 @@
-import EditorPageContainer from './containers/editor-page';
+import SpecificFileEditorPageContainer from './containers/specific-file-editor-page';
 
 const Editor = () => {
-  return <EditorPageContainer />;
+  return <SpecificFileEditorPageContainer />;
 };
 
 export default Editor;
