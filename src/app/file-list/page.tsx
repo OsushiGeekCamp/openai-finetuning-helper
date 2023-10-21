@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchFiles } from '@/utils/openai';
 import Loading from '@/components/loading';
 import { getApiKey } from '@/utils/openai';
+import Link from 'next/link';
 
 type File = {
   id: string;
@@ -97,7 +98,21 @@ const FileList = () => {
               {jsonData &&
                 jsonData.data.map((item, index) => (
                   <tr key={index} className='text-gray-700 border-t'>
-                    <td className='py-2 px-4 text-left border'>{item.id}</td>
+                    <td className='py-2 px-4 text-left border'>
+                      {item.purpose === 'fine-tune' ? (
+                        <Link
+                          className='hover:underline'
+                          href={{
+                            pathname: '/editor',
+                            query: { id: item.id, name: item.filename },
+                          }}
+                        >
+                          {item.id}
+                        </Link>
+                      ) : (
+                        item.id
+                      )}
+                    </td>
                     <td className='py-2 px-4 text-left border'>
                       {item.object}
                     </td>
