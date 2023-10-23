@@ -97,11 +97,11 @@ const FileList = () => {
           <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
             <tr>
               {[
+                'filename',
                 'File-id',
                 'object',
                 'size',
                 'created_at',
-                'filename',
                 'purpose',
                 'Quick Start',
               ].map((header, index) => (
@@ -123,6 +123,16 @@ const FileList = () => {
                     key={index}
                     className='text-gray-800 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200'
                   >
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
+                      >
+                        <div className='py-3 px-6'>{item.filename}</div>
+                      </Link>
+                    </td>
                     <td>
                       <Link
                         href={{
@@ -176,16 +186,6 @@ const FileList = () => {
                             },
                           )}
                         </div>
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        href={{
-                          pathname: '/editor',
-                          query: { id: item.id, name: item.filename },
-                        }}
-                      >
-                        <div className='py-3 px-6'>{item.filename}</div>
                       </Link>
                     </td>
                     <td>
