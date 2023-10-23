@@ -19,6 +19,19 @@ type Response = {
   data: File[];
 };
 
+const formatBytes = (bytes: number, decimals: number = 2): string => {
+  if (bytes === 0) return '0 Bytes';
+  if (bytes === 1) return '1 Byte';
+
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return (
+    parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + ' ' + sizes[i]
+  );
+};
+
 const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
@@ -75,70 +88,140 @@ const FileList = () => {
   }
 
   return (
-    <div className='bg-white dark:bg-gray-800 min-h-screen'>
-      <div className='p-8'>
-        <h1 className='text-2xl font-bold mb-4'>FileList</h1>
-        <div className='overflow-x-auto'>
-          <table className='min-w-full bg-white shadow-md rounded-md'>
-            <thead className='bg-gray-800 text-white'>
-              <tr>
-                <th className='sticky top-0 w-1/4 bg-gray-800 text-white py-2 text-left'>
-                  File-id
+    <div className='bg-gray-100 dark:bg-gray-900 min-h-screen p-8'>
+      <h1 className='text-4xl font-semibold mb-6 text-gray-800 dark:text-gray-200'>
+        FileList
+      </h1>
+      <div className='overflow-x-auto shadow-md rounded-lg'>
+        <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
+          <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
+            <tr>
+              {[
+                'File-id',
+                'object',
+                'size',
+                'created_at',
+                'filename',
+                'purpose',
+                'Quick Start',
+              ].map((header, index) => (
+                <th
+                  key={index}
+                  className='sticky top-0 py-3 px-6 text-left font-medium'
+                >
+                  {header}
                 </th>
-                <th className='w-1/4 py-2 text-left'>object</th>
-                <th className='w-1/4 py-2 text-left'>bytes</th>
-                <th className='w-1/4 py-2 text-left'>created_at</th>
-                <th className='w-1/4 py-2 text-left'>filename</th>
-                <th className='w-1/4 py-2 text-left'>purpose</th>
-                <th className='w-1/4 py-2 text-left'>Quick Start</th>{' '}
-                {/* Added column for Quick Start button */}
-              </tr>
-            </thead>
-            <tbody>
-              {jsonData &&
-                jsonData.data.map((item, index) => (
-                  <tr key={index} className='text-gray-700 border-t'>
-                    <td className='py-2 px-4 text-left border'>
-                      {item.purpose === 'fine-tune' ? (
-                        <Link
-                          className='hover:underline'
-                          href={{
-                            pathname: '/editor',
-                            query: { id: item.id, name: item.filename },
-                          }}
-                        >
-                          {item.id}
-                        </Link>
-                      ) : (
-                        item.id
-                      )}
-                    </td>
-                    <td className='py-2 px-4 text-left border'>
-                      {item.object}
-                    </td>
-                    <td className='py-2 px-4 text-left border'>{item.bytes}</td>
-                    <td className='py-2 px-4 text-left border'>
-                      {new Date(item.created_at * 1000).toLocaleString()}
-                    </td>
-                    <td className='py-2 px-4 text-left border'>
-                      {item.filename}
-                    </td>
-                    <td className='py-2 px-4 text-left border'>
-                      {item.purpose}
-                    </td>
-                    <td className='py-2 px-4 text-left border'>
-                      <button
-                        onClick={() => handleQuickStart(item.id)}
-                        className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue'
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {jsonData &&
+              jsonData.data
+                .filter((item) => item.purpose === 'fine-tune')
+                .map((item, index) => (
+                  <tr
+                    key={index}
+                    className='text-gray-800 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200'
+                  >
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
                       >
-                        Quick Start
-                      </button>
+                        <div className='py-3 px-6'>{item.id}</div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
+                      >
+                        <div className='py-3 px-6'>{item.object}</div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
+                      >
+                        <div className='py-3 px-6'>
+                          {formatBytes(item.bytes)}
+                        </div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
+                      >
+                        <div className='py-3 px-6'>
+                          {new Date(item.created_at * 1000).toLocaleString(
+                            'ja-JP',
+                            {
+                              year: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                              hour12: false,
+                            },
+                          )}
+                        </div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
+                      >
+                        <div className='py-3 px-6'>{item.filename}</div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
+                      >
+                        <div className='py-3 px-6'>{item.purpose}</div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={{
+                          pathname: '/editor',
+                          query: { id: item.id, name: item.filename },
+                        }}
+                      >
+                        <div className='py-3 px-6'>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleQuickStart(item.id);
+                            }}
+                            className='flex items-center justify-center bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 active:bg-blue-800 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition duration-150'
+                          >
+                            <span className='mr-2'>Quick Start</span>
+                          </button>
+                        </div>
+                      </Link>
                     </td>
                   </tr>
                 ))}
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );
