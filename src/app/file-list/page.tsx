@@ -96,22 +96,16 @@ const FileList = () => {
         <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
           <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
             <tr>
-              {[
-                'filename',
-                'File-id',
-                'object',
-                'size',
-                'created_at',
-                'purpose',
-                'Quick Start',
-              ].map((header, index) => (
-                <th
-                  key={index}
-                  className='sticky top-0 py-3 px-6 text-left font-medium'
-                >
-                  {header}
-                </th>
-              ))}
+              {['filename', 'File-id', 'size', 'created_at', 'Quick Start'].map(
+                (header, index) => (
+                  <th
+                    key={index}
+                    className='sticky top-0 py-3 px-6 text-left font-medium'
+                  >
+                    {header}
+                  </th>
+                ),
+              )}
             </tr>
           </thead>
           <tbody>
@@ -150,16 +144,6 @@ const FileList = () => {
                           query: { id: item.id, name: item.filename },
                         }}
                       >
-                        <div className='py-3 px-6'>{item.object}</div>
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        href={{
-                          pathname: '/editor',
-                          query: { id: item.id, name: item.filename },
-                        }}
-                      >
                         <div className='py-3 px-6'>
                           {formatBytes(item.bytes)}
                         </div>
@@ -186,16 +170,6 @@ const FileList = () => {
                             },
                           )}
                         </div>
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        href={{
-                          pathname: '/editor',
-                          query: { id: item.id, name: item.filename },
-                        }}
-                      >
-                        <div className='py-3 px-6'>{item.purpose}</div>
                       </Link>
                     </td>
                     <td>
