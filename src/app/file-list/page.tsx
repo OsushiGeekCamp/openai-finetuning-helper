@@ -1,10 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import localFont from 'next/font/local';
+import Link from 'next/link';
+
 import { fetchFiles } from '@/utils/openai';
 import Loading from '@/components/loading';
 import { getApiKey } from '@/utils/openai';
-import Link from 'next/link';
+
+import style from './styles.module.css';
 
 type File = {
   id: string;
@@ -18,6 +22,13 @@ type File = {
 type Response = {
   data: File[];
 };
+
+const materialSymbols = localFont({
+  variable: '--font-material-symbols',
+  style: 'normal',
+  src: '../../../node_modules/material-symbols/material-symbols-outlined.woff2',
+  display: 'block',
+});
 
 const formatBytes = (bytes: number, decimals: number = 2): string => {
   if (bytes === 0) return '0 Bytes';
@@ -96,7 +107,7 @@ const FileList = () => {
         <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
           <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
             <tr>
-              {['filename', 'File-id', 'size', 'created_at', 'Quick Start'].map(
+              {['filename', 'File-id', 'size', 'created_at'].map(
                 (header, index) => (
                   <th
                     key={index}
@@ -106,6 +117,9 @@ const FileList = () => {
                   </th>
                 ),
               )}
+              <th className='sticky top-0 py-3 px-6 text-left font-medium flex justify-center'>
+                Quick Start
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -179,15 +193,19 @@ const FileList = () => {
                           query: { id: item.id, name: item.filename },
                         }}
                       >
-                        <div className='py-3 px-6'>
+                        <div className='py-3 flex items-center justify-center'>
                           <button
                             onClick={(e) => {
                               e.preventDefault();
                               handleQuickStart(item.id);
                             }}
-                            className='flex items-center justify-center bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 active:bg-blue-800 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition duration-150'
+                            className='flex items-center justify-center bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 active:bg-blue-800 text-white px-4 py-1 rounded-lg focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition duration-150'
                           >
-                            <span className='mr-2'>Quick Start</span>
+                            <span
+                              className={`${materialSymbols.className} ${style.icon} text-3xl`}
+                            >
+                              play_arrow
+                            </span>
                           </button>
                         </div>
                       </Link>
