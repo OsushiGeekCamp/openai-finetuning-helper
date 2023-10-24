@@ -107,16 +107,14 @@ const FileList = () => {
         <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
           <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
             <tr>
-              {['filename', 'File-id', 'size', 'created_at'].map(
-                (header, index) => (
-                  <th
-                    key={index}
-                    className='sticky top-0 py-3 px-6 text-left font-medium'
-                  >
-                    {header}
-                  </th>
-                ),
-              )}
+              {['Name', 'ID', 'size', 'Date Created'].map((header, index) => (
+                <th
+                  key={index}
+                  className='sticky top-0 py-3 px-6 text-left font-medium'
+                >
+                  {header}
+                </th>
+              ))}
               <th className='sticky top-0 py-3 px-6 text-left font-medium flex justify-center'>
                 Quick Start
               </th>
