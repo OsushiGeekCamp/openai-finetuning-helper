@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   material-symbols:
-    specifier: ^0.13.1
-    version: 0.13.1
+    specifier: ^0.13.2
+    version: 0.13.2
   next:
     specifier: 14.0.0
     version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -1871,8 +1871,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /material-symbols@0.13.1:
-    resolution: {integrity: sha512-m7FylIZ3NzsMpNcv233QkVyMEDoE8CJeI12ZTij4x3pOizaesgeBDE9rQ74JY4xX5gJW+BhTL/eV37brm/JplA==}
+  /material-symbols@0.13.2:
+    resolution: {integrity: sha512-O8p2pguTZ/3EXym606wFxwI7DPS+cPM5jlS2mcO3EIcqhnHcKQbTD9lVkd0JK4Ygq/vuuiLl44T2xZYMJmpwLw==}
     dev: false
 
   /merge-stream@2.0.0:
