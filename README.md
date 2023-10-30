@@ -1,6 +1,7 @@
 [![Build and Deploy](https://github.com/OsushiGeekCamp/openai-finetuning-helper/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/OsushiGeekCamp/openai-finetuning-helper/actions/workflows/gh-pages.yml)
 [![lint](https://github.com/OsushiGeekCamp/openai-finetuning-helper/actions/workflows/lint.yml/badge.svg)](https://github.com/OsushiGeekCamp/openai-finetuning-helper/actions/workflows/lint.yml)
 [![CodeQL](https://github.com/OsushiGeekCamp/openai-finetuning-helper/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/OsushiGeekCamp/openai-finetuning-helper/actions/workflows/github-code-scanning/codeql)
+[![codecov](https://codecov.io/gh/OsushiGeekCamp/openai-finetuning-helper/graph/badge.svg?token=OHS30AS53A)](https://codecov.io/gh/OsushiGeekCamp/openai-finetuning-helper)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
