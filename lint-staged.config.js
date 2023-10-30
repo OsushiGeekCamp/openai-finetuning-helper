@@ -3,5 +3,6 @@ module.exports = {
     () => 'tsc -p tsconfig.json --noEmit',
     () => 'next lint',
     () => 'prettier --write .',
+    () => 'jest --ci',
   ],
 };
