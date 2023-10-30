@@ -7,7 +7,9 @@
     "prepare": "husky install",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "material-symbols": "^0.13.2",
