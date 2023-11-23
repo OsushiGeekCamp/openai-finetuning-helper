@@ -94,4 +94,11 @@ describe('examplesReducer', () => {
     const state = examplesReducer(initialExamples, action);
     expect(state).toHaveLength(0);
   });
+
+  it('should throw error for unknown action type', () => {
+    const action: any = { type: 'UNKNOWN_ACTION' };
+    expect(() => examplesReducer(initialExamples, action)).toThrow(
+      'Unknown action type.',
+    );
+  });
 });
