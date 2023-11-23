@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -9,6 +10,12 @@ export const metadata: Metadata = {
   description: 'A tool to help you create your fine-tuning dataset',
 };
 
+const MaterialSymbols = localFont({
+  variable: '--font-material-symbols',
+  src: '../../node_modules/material-symbols/material-symbols-outlined.woff2',
+  display: 'block',
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -16,7 +23,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} ${MaterialSymbols.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }
