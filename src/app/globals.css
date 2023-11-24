@@ -25,3 +25,12 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.material-symbols {
+  font-family: var(--font-material-symbols);
+  display: 'block';
+}
+
+.font-variation-fill {
+  font-variation-settings: 'FILL' 1;
+}
