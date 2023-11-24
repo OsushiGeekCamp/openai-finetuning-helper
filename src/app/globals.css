@@ -28,7 +28,7 @@ body {
 
 .material-symbols {
   font-family: var(--font-material-symbols);
-  display: 'block',
+  display: 'block';
 }
 
 .font-variation-fill {
