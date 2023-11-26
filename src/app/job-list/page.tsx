@@ -96,27 +96,29 @@ const FineTuningJobsPage = () => {
   }, [isFiltered, jobs]);
 
   return (
-    <div className='bg-white dark:bg-gray-800 min-h-screen'>
+    <div className='bg-white dark:bg-gray-900 min-h-screen'>
       <div className='p-8'>
-        <h1 className='text-2xl font-bold mb-4'>Fine Tuning Jobs</h1>
+        <h1 className='text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200'>
+          Fine Tuning Jobs
+        </h1>
         <ToggleSwitch
           checked={isFiltered}
           label='Show only succeeded jobs'
           onChange={setIsFiltered}
         />
-        <table className='min-w-full bg-white shadow-md rounded-md mt-4'>
-          <thead className='bg-gray-800 text-white'>
+        <table className='min-w-full bg-white dark:bg-gray-800 shadow-md rounded-md mt-4'>
+          <thead className='bg-gray-800 dark:bg-gray-700 text-white'>
             <tr>
               <th className='w-1/5 py-2'>Job ID</th>
               <th className='w-1/5 py-2'>Fine Tuned Model</th>
               <th className='w-1/5 py-2'>Status</th>
               <th className='w-1/5 py-2'>Training File ID</th>
-              <th className='w-1/5 py-2'>File Name</th> {/* カラムを追加 */}
+              <th className='w-1/5 py-2'>File Name</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className='text-gray-800 dark:text-gray-200'>
             {filteredJobs.map((job) => (
-              <tr key={job.id} className='text-gray-700 border-t'>
+              <tr key={job.id} className='border-t dark:border-gray-700'>
                 <td className='py-2 px-4'>{job.id}</td>
                 <td className='py-2 px-4'>{job.fine_tuned_model}</td>
                 <td className='py-2 px-4'>{job.status}</td>
