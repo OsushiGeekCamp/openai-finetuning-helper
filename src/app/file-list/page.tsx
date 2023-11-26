@@ -36,9 +36,34 @@ const formatBytes = (bytes: number, decimals: number = 2): string => {
   );
 };
 
+const SORT_FIELDS = {
+  NAME: 'Name',
+  ID: 'ID',
+  SIZE: 'Size',
+  DATE_CREATED: 'Date Created',
+} as const;
+
+type SortField = (typeof SORT_FIELDS)[keyof typeof SORT_FIELDS];
+
 const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
+  const [sortField, setSortField] = useState<SortField>(
+    SORT_FIELDS.DATE_CREATED,
+  );
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const sortableColumns: SortField[] = [
+    SORT_FIELDS.NAME,
+    SORT_FIELDS.ID,
+    SORT_FIELDS.SIZE,
+    SORT_FIELDS.DATE_CREATED,
+  ];
+
+  const sortData = (field: SortField) => {
+    setSortField(field);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +85,35 @@ const FileList = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (sortField !== null && jsonData) {
+      const sortedData = [...jsonData.data].sort((a, b) => {
+        if (sortField === SORT_FIELDS.NAME) {
+          return sortDirection === 'asc'
+            ? a.filename.localeCompare(b.filename)
+            : b.filename.localeCompare(a.filename);
+        }
+        if (sortField === SORT_FIELDS.ID) {
+          return sortDirection === 'asc'
+            ? a.id.localeCompare(b.id)
+            : b.id.localeCompare(a.id);
+        }
+        if (sortField === SORT_FIELDS.SIZE) {
+          return sortDirection === 'asc'
+            ? a.bytes - b.bytes
+            : b.bytes - a.bytes;
+        }
+        if (sortField === SORT_FIELDS.DATE_CREATED) {
+          return sortDirection === 'asc'
+            ? a.created_at - b.created_at
+            : b.created_at - a.created_at;
+        }
+        return 0;
+      });
+      setJsonData({ ...jsonData, data: sortedData });
+    }
+  }, [sortField, sortDirection]);
 
   const handleQuickStart = async (fileId: string) => {
     const openaiApiKey = getApiKey();
@@ -100,15 +154,21 @@ const FileList = () => {
         <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
           <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
             <tr>
-              {['Name', 'ID', 'size', 'Date Created'].map((header, index) => (
+              {sortableColumns.map((header, index) => (
                 <th
                   key={index}
-                  className='sticky top-0 py-3 px-6 text-left font-medium'
+                  className='sticky top-0 py-3 px-6 text-left font-medium cursor-pointer transition duration-200 bg-gray-500 bg-opacity-50 hover:bg-opacity-70 dark:bg-gray-700 dark:hover:bg-gray-800'
+                  onClick={() => sortData(header)}
                 >
-                  {header}
+                  <div className='flex items-center justify-between'>
+                    {header}
+                    {sortField === header && (
+                      <span>{sortDirection === 'asc' ? '▲' : '▼'}</span>
+                    )}
+                  </div>
                 </th>
               ))}
-              <th className='sticky top-0 py-3 px-6 text-left font-medium flex justify-center'>
+              <th className='sticky top-0 py-3 px-6 text-left font-medium flex justify-center bg-gray-500 bg-opacity-50'>
                 Quick Start
               </th>
             </tr>
