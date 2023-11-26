@@ -39,13 +39,6 @@ const formatBytes = (bytes: number, decimals: number = 2): string => {
 const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
-  const [sortField, setSortField] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
-  const sortData = (field: string) => {
-    setSortField(field);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,25 +60,6 @@ const FileList = () => {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (sortField !== null && jsonData) {
-      const sortedData = [...jsonData.data].sort((a, b) => {
-        if (sortField === 'Name') {
-          return sortDirection === 'asc'
-            ? a.filename.localeCompare(b.filename)
-            : b.filename.localeCompare(a.filename);
-        }
-        if (sortField === 'Date Created') {
-          return sortDirection === 'asc'
-            ? a.created_at - b.created_at
-            : b.created_at - a.created_at;
-        }
-        return 0;
-      });
-      setJsonData({ ...jsonData, data: sortedData });
-    }
-  }, [sortField, sortDirection]);
 
   const handleQuickStart = async (fileId: string) => {
     const openaiApiKey = getApiKey();
@@ -122,31 +96,6 @@ const FileList = () => {
       <h1 className='text-4xl font-semibold mb-6 text-gray-800 dark:text-gray-200'>
         FileList
       </h1>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        {['Name', 'Date Created'].map((header, index) => (
-          <button
-            key={index}
-            onClick={() => sortData(header)}
-            className='flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm mt-2 mr-2 mb-2'
-          >
-            <svg
-              className='fill-current w-4 h-4 mr-2'
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 20 20'
-            >
-              <path d='M7 14l5-5 5 5H7z' />
-            </svg>
-            {header}
-            <span>
-              {sortField === header
-                ? sortDirection === 'asc'
-                  ? '▲'
-                  : '▼'
-                : ''}
-            </span>
-          </button>
-        ))}
-      </div>
       <div className='overflow-x-auto shadow-md rounded-lg'>
         <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
           <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
