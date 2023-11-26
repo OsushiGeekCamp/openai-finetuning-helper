@@ -36,15 +36,31 @@ const formatBytes = (bytes: number, decimals: number = 2): string => {
   );
 };
 
+const SORT_FIELDS = {
+  NAME: 'Name',
+  ID: 'ID',
+  SIZE: 'Size',
+  DATE_CREATED: 'Date Created',
+} as const;
+
+type SortField = (typeof SORT_FIELDS)[keyof typeof SORT_FIELDS];
+
 const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
-  const [sortField, setSortField] = useState<string>('Date Created');
+  const [sortField, setSortField] = useState<SortField>(
+    SORT_FIELDS.DATE_CREATED,
+  );
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
-  const sortableColumns = ['Name', 'ID', 'Size', 'Date Created'];
+  const sortableColumns: SortField[] = [
+    SORT_FIELDS.NAME,
+    SORT_FIELDS.ID,
+    SORT_FIELDS.SIZE,
+    SORT_FIELDS.DATE_CREATED,
+  ];
 
-  const sortData = (field: string) => {
+  const sortData = (field: SortField) => {
     setSortField(field);
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
   };
@@ -73,22 +89,22 @@ const FileList = () => {
   useEffect(() => {
     if (sortField !== null && jsonData) {
       const sortedData = [...jsonData.data].sort((a, b) => {
-        if (sortField === 'Name') {
+        if (sortField === SORT_FIELDS.NAME) {
           return sortDirection === 'asc'
             ? a.filename.localeCompare(b.filename)
             : b.filename.localeCompare(a.filename);
         }
-        if (sortField === 'ID') {
+        if (sortField === SORT_FIELDS.ID) {
           return sortDirection === 'asc'
             ? a.id.localeCompare(b.id)
             : b.id.localeCompare(a.id);
         }
-        if (sortField === 'Size') {
+        if (sortField === SORT_FIELDS.SIZE) {
           return sortDirection === 'asc'
             ? a.bytes - b.bytes
             : b.bytes - a.bytes;
         }
-        if (sortField === 'Date Created') {
+        if (sortField === SORT_FIELDS.DATE_CREATED) {
           return sortDirection === 'asc'
             ? a.created_at - b.created_at
             : b.created_at - a.created_at;
