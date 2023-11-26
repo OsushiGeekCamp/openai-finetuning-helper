@@ -39,8 +39,8 @@ const formatBytes = (bytes: number, decimals: number = 2): string => {
 const FileList = () => {
   const [jsonData, setJsonData] = useState<Response>();
   const [error, setError] = useState<string>();
-  const [sortField, setSortField] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sortField, setSortField] = useState<string>('Date Created');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
   const sortableColumns = ['Name', 'ID', 'Size', 'Date Created'];
 
