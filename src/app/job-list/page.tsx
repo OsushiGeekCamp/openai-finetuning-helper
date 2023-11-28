@@ -10,6 +10,7 @@ interface JobEvent {
 
 interface JobDetails {
   id: string;
+  created_at: number;
   fine_tuned_model: string;
   status: string;
   training_file: string;
@@ -20,6 +21,7 @@ const openaiApiKey: string = ''; // APIキーを格納する変数を定義
 
 const SORT_FIELDS = {
   JOB_ID: 'Job ID',
+  JOB_CREATED: 'Job Created',
   FINE_TUNED_MODEL: 'Fine Tuned Model',
   STATUS: 'Status',
   TRAINING_FILE_ID: 'Training File ID',
@@ -30,6 +32,7 @@ type SortField = (typeof SORT_FIELDS)[keyof typeof SORT_FIELDS];
 
 const sortableColumns: SortField[] = [
   SORT_FIELDS.JOB_ID,
+  SORT_FIELDS.JOB_CREATED,
   SORT_FIELDS.FINE_TUNED_MODEL,
   SORT_FIELDS.STATUS,
   SORT_FIELDS.TRAINING_FILE_ID,
@@ -107,6 +110,11 @@ const FineTuningJobsPage = () => {
             ? a.id.localeCompare(b.id)
             : b.id.localeCompare(a.id);
         }
+        if (sortField === SORT_FIELDS.JOB_CREATED) {
+          return sortDirection === 'asc'
+            ? a.created_at - b.created_at
+            : b.created_at - a.created_at;
+        }
         if (sortField === SORT_FIELDS.FINE_TUNED_MODEL) {
           return sortDirection === 'asc'
             ? a.fine_tuned_model.localeCompare(b.fine_tuned_model)
@@ -179,6 +187,9 @@ const FineTuningJobsPage = () => {
             {filteredJobs.map((job) => (
               <tr key={job.id} className='border-t dark:border-gray-700'>
                 <td className='py-2 px-4'>{job.id}</td>
+                <td className='py-2 px-4'>
+                  {new Date(job.created_at * 1000).toLocaleString()}
+                </td>
                 <td className='py-2 px-4'>{job.fine_tuned_model}</td>
                 <td className='py-2 px-4'>{job.status}</td>
                 <td className='py-2 px-4'>{job.training_file}</td>
