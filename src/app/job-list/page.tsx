@@ -78,15 +78,6 @@ const FineTuningJobsPage = () => {
     setFilteredJobs(jobs);
   }, [jobs]);
 
-  const handleFilterStatus = () => {
-    const succeededJobs = jobs.filter((job) => job.status === 'succeeded');
-    setFilteredJobs(succeededJobs);
-  };
-
-  const handleResetFilter = () => {
-    setFilteredJobs(jobs);
-  };
-
   useEffect(() => {
     if (isFiltered) {
       setFilteredJobs(jobs.filter((job) => job.status === 'succeeded'));
