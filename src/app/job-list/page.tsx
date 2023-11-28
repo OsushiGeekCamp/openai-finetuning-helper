@@ -43,7 +43,9 @@ const FineTuningJobsPage = () => {
   const [jobs, setJobs] = useState<JobDetails[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobDetails[]>([]);
   const [isFiltered, setIsFiltered] = useState(false); // フィルタリングが有効かどうかをトラックするstate
-  const [sortField, setSortField] = useState<SortField>(SORT_FIELDS.FILE_NAME);
+  const [sortField, setSortField] = useState<SortField>(
+    SORT_FIELDS.JOB_CREATED,
+  );
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
   const sortData = (field: SortField) => {
@@ -170,7 +172,7 @@ const FineTuningJobsPage = () => {
               {sortableColumns.map((header, index) => (
                 <th
                   key={index}
-                  className='w-1/5 py-2 cursor-pointer'
+                  className='sticky top-0 py-3 px-6 text-left font-medium cursor-pointer transition duration-200 bg-gray-500 bg-opacity-50 hover:bg-opacity-70 dark:bg-gray-700 dark:hover:bg-gray-800'
                   onClick={() => sortData(header)}
                 >
                   <div className='flex items-center justify-between'>
