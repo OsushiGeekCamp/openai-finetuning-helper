@@ -18,10 +18,35 @@ interface JobDetails {
 
 const openaiApiKey: string = ''; // APIキーを格納する変数を定義
 
+const SORT_FIELDS = {
+  JOB_ID: 'Job ID',
+  FINE_TUNED_MODEL: 'Fine Tuned Model',
+  STATUS: 'Status',
+  TRAINING_FILE_ID: 'Training File ID',
+  FILE_NAME: 'File Name',
+} as const;
+
+type SortField = (typeof SORT_FIELDS)[keyof typeof SORT_FIELDS];
+
+const sortableColumns: SortField[] = [
+  SORT_FIELDS.JOB_ID,
+  SORT_FIELDS.FINE_TUNED_MODEL,
+  SORT_FIELDS.STATUS,
+  SORT_FIELDS.TRAINING_FILE_ID,
+  SORT_FIELDS.FILE_NAME,
+];
+
 const FineTuningJobsPage = () => {
   const [jobs, setJobs] = useState<JobDetails[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobDetails[]>([]);
   const [isFiltered, setIsFiltered] = useState(false); // フィルタリングが有効かどうかをトラックするstate
+  const [sortField, setSortField] = useState<SortField>(SORT_FIELDS.FILE_NAME);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const sortData = (field: SortField) => {
+    setSortField(field);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -75,6 +100,40 @@ const FineTuningJobsPage = () => {
   }, []);
 
   useEffect(() => {
+    if (sortField !== null && jobs) {
+      const sortedJobs = [...jobs].sort((a, b) => {
+        if (sortField === SORT_FIELDS.JOB_ID) {
+          return sortDirection === 'asc'
+            ? a.id.localeCompare(b.id)
+            : b.id.localeCompare(a.id);
+        }
+        if (sortField === SORT_FIELDS.FINE_TUNED_MODEL) {
+          return sortDirection === 'asc'
+            ? a.fine_tuned_model.localeCompare(b.fine_tuned_model)
+            : b.fine_tuned_model.localeCompare(a.fine_tuned_model);
+        }
+        if (sortField === SORT_FIELDS.STATUS) {
+          return sortDirection === 'asc'
+            ? a.status.localeCompare(b.status)
+            : b.status.localeCompare(a.status);
+        }
+        if (sortField === SORT_FIELDS.TRAINING_FILE_ID) {
+          return sortDirection === 'asc'
+            ? a.training_file.localeCompare(b.training_file)
+            : b.training_file.localeCompare(a.training_file);
+        }
+        if (sortField === SORT_FIELDS.FILE_NAME) {
+          return sortDirection === 'asc'
+            ? (a.filename ?? '').localeCompare(b.filename ?? '')
+            : (b.filename ?? '').localeCompare(a.filename ?? '');
+        }
+        return 0;
+      });
+      setJobs(sortedJobs);
+    }
+  }, [sortField, sortDirection]);
+
+  useEffect(() => {
     setFilteredJobs(jobs);
   }, [jobs]);
 
@@ -97,14 +156,23 @@ const FineTuningJobsPage = () => {
           label='Show only succeeded jobs'
           onChange={setIsFiltered}
         />
-        <table className='min-w-full bg-white dark:bg-gray-800 shadow-md rounded-md mt-4'>
-          <thead className='bg-gray-800 dark:bg-gray-700 text-white'>
+        <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
+          <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
             <tr>
-              <th className='w-1/5 py-2'>Job ID</th>
-              <th className='w-1/5 py-2'>Fine Tuned Model</th>
-              <th className='w-1/5 py-2'>Status</th>
-              <th className='w-1/5 py-2'>Training File ID</th>
-              <th className='w-1/5 py-2'>File Name</th>
+              {sortableColumns.map((header, index) => (
+                <th
+                  key={index}
+                  className='w-1/5 py-2 cursor-pointer'
+                  onClick={() => sortData(header)}
+                >
+                  <div className='flex items-center justify-between'>
+                    {header}
+                    {sortField === header && (
+                      <span>{sortDirection === 'asc' ? '▲' : '▼'}</span>
+                    )}
+                  </div>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className='text-gray-800 dark:text-gray-200'>
