@@ -20,32 +20,48 @@ interface JobDetails {
 const openaiApiKey: string = ''; // APIキーを格納する変数を定義
 
 const SORT_FIELDS = {
-  JOB_ID: 'Job ID',
-  JOB_CREATED: 'Job Created',
+  ID: 'Job ID',
+  CREATED_AT: 'Job Created',
   FINE_TUNED_MODEL: 'Fine Tuned Model',
   STATUS: 'Status',
-  TRAINING_FILE_ID: 'Training File ID',
-  FILE_NAME: 'File Name',
+  TRAINING_FILE: 'Training File ID',
+  FILENAME: 'File Name',
 } as const;
 
-type SortField = (typeof SORT_FIELDS)[keyof typeof SORT_FIELDS];
+type SortField = keyof typeof SORT_FIELDS;
 
 const sortableColumns: SortField[] = [
-  SORT_FIELDS.JOB_ID,
-  SORT_FIELDS.JOB_CREATED,
-  SORT_FIELDS.FINE_TUNED_MODEL,
-  SORT_FIELDS.STATUS,
-  SORT_FIELDS.TRAINING_FILE_ID,
-  SORT_FIELDS.FILE_NAME,
+  'ID',
+  'CREATED_AT',
+  'FINE_TUNED_MODEL',
+  'STATUS',
+  'TRAINING_FILE',
+  'FILENAME',
 ];
+
+const compareFields = (
+  a: JobDetails,
+  b: JobDetails,
+  field: keyof JobDetails,
+  direction: 'asc' | 'desc',
+) => {
+  if (typeof a[field] === 'string' && typeof b[field] === 'string') {
+    return direction === 'asc'
+      ? (a[field] as string).localeCompare(b[field] as string)
+      : (b[field] as string).localeCompare(a[field] as string);
+  } else if (typeof a[field] === 'number' && typeof b[field] === 'number') {
+    return direction === 'asc'
+      ? (a[field] as number) - (b[field] as number)
+      : (b[field] as number) - (a[field] as number);
+  }
+  return 0;
+};
 
 const FineTuningJobsPage = () => {
   const [jobs, setJobs] = useState<JobDetails[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobDetails[]>([]);
   const [isFiltered, setIsFiltered] = useState(false); // フィルタリングが有効かどうかをトラックするstate
-  const [sortField, setSortField] = useState<SortField>(
-    SORT_FIELDS.JOB_CREATED,
-  );
+  const [sortField, setSortField] = useState<SortField>('CREATED_AT');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
   const sortData = (field: SortField) => {
@@ -107,37 +123,10 @@ const FineTuningJobsPage = () => {
   useEffect(() => {
     if (sortField !== null && jobs) {
       const sortedJobs = [...jobs].sort((a, b) => {
-        if (sortField === SORT_FIELDS.JOB_ID) {
-          return sortDirection === 'asc'
-            ? a.id.localeCompare(b.id)
-            : b.id.localeCompare(a.id);
-        }
-        if (sortField === SORT_FIELDS.JOB_CREATED) {
-          return sortDirection === 'asc'
-            ? a.created_at - b.created_at
-            : b.created_at - a.created_at;
-        }
-        if (sortField === SORT_FIELDS.FINE_TUNED_MODEL) {
-          return sortDirection === 'asc'
-            ? a.fine_tuned_model.localeCompare(b.fine_tuned_model)
-            : b.fine_tuned_model.localeCompare(a.fine_tuned_model);
-        }
-        if (sortField === SORT_FIELDS.STATUS) {
-          return sortDirection === 'asc'
-            ? a.status.localeCompare(b.status)
-            : b.status.localeCompare(a.status);
-        }
-        if (sortField === SORT_FIELDS.TRAINING_FILE_ID) {
-          return sortDirection === 'asc'
-            ? a.training_file.localeCompare(b.training_file)
-            : b.training_file.localeCompare(a.training_file);
-        }
-        if (sortField === SORT_FIELDS.FILE_NAME) {
-          return sortDirection === 'asc'
-            ? (a.filename ?? '').localeCompare(b.filename ?? '')
-            : (b.filename ?? '').localeCompare(a.filename ?? '');
-        }
-        return 0;
+        const jobDetailKey = sortField
+          .toLowerCase()
+          .replace(/ /g, '_') as keyof JobDetails;
+        return compareFields(a, b, jobDetailKey, sortDirection);
       });
       setJobs(sortedJobs);
     }
@@ -176,7 +165,7 @@ const FineTuningJobsPage = () => {
                   onClick={() => sortData(header)}
                 >
                   <div className='flex items-center justify-between'>
-                    {header}
+                    {SORT_FIELDS[header]}
                     {sortField === header && (
                       <span>{sortDirection === 'asc' ? '▲' : '▼'}</span>
                     )}
