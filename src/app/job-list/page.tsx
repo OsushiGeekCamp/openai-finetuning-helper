@@ -17,8 +17,6 @@ interface JobDetails {
   filename?: string; // filename属性を追加
 }
 
-const openaiApiKey: string = ''; // APIキーを格納する変数を定義
-
 const SORT_FIELDS = {
   ID: 'Job ID',
   CREATED_AT: 'Job Created',
