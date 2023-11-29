@@ -10,6 +10,7 @@ interface JobEvent {
 
 interface JobDetails {
   id: string;
+  created_at: number;
   fine_tuned_model: string;
   status: string;
   training_file: string;
@@ -18,10 +19,55 @@ interface JobDetails {
 
 const openaiApiKey: string = ''; // APIキーを格納する変数を定義
 
+const SORT_FIELDS = {
+  ID: 'Job ID',
+  CREATED_AT: 'Job Created',
+  FINE_TUNED_MODEL: 'Fine Tuned Model',
+  STATUS: 'Status',
+  TRAINING_FILE: 'Training File ID',
+  FILENAME: 'File Name',
+} as const;
+
+type SortField = keyof typeof SORT_FIELDS;
+
+const sortableColumns: SortField[] = [
+  'ID',
+  'CREATED_AT',
+  'FINE_TUNED_MODEL',
+  'STATUS',
+  'TRAINING_FILE',
+  'FILENAME',
+];
+
+const compareFields = (
+  a: JobDetails,
+  b: JobDetails,
+  field: keyof JobDetails,
+  direction: 'asc' | 'desc',
+) => {
+  if (typeof a[field] === 'string' && typeof b[field] === 'string') {
+    return direction === 'asc'
+      ? (a[field] as string).localeCompare(b[field] as string)
+      : (b[field] as string).localeCompare(a[field] as string);
+  } else if (typeof a[field] === 'number' && typeof b[field] === 'number') {
+    return direction === 'asc'
+      ? (a[field] as number) - (b[field] as number)
+      : (b[field] as number) - (a[field] as number);
+  }
+  return 0;
+};
+
 const FineTuningJobsPage = () => {
   const [jobs, setJobs] = useState<JobDetails[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobDetails[]>([]);
   const [isFiltered, setIsFiltered] = useState(false); // フィルタリングが有効かどうかをトラックするstate
+  const [sortField, setSortField] = useState<SortField>('CREATED_AT');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const sortData = (field: SortField) => {
+    setSortField(field);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -75,6 +121,18 @@ const FineTuningJobsPage = () => {
   }, []);
 
   useEffect(() => {
+    if (sortField !== null && jobs) {
+      const sortedJobs = [...jobs].sort((a, b) => {
+        const jobDetailKey = sortField
+          .toLowerCase()
+          .replace(/ /g, '_') as keyof JobDetails;
+        return compareFields(a, b, jobDetailKey, sortDirection);
+      });
+      setJobs(sortedJobs);
+    }
+  }, [sortField, sortDirection]);
+
+  useEffect(() => {
     setFilteredJobs(jobs);
   }, [jobs]);
 
@@ -97,20 +155,32 @@ const FineTuningJobsPage = () => {
           label='Show only succeeded jobs'
           onChange={setIsFiltered}
         />
-        <table className='min-w-full bg-white dark:bg-gray-800 shadow-md rounded-md mt-4'>
-          <thead className='bg-gray-800 dark:bg-gray-700 text-white'>
+        <table className='min-w-full bg-white dark:bg-gray-800 divide-y divide-gray-300'>
+          <thead className='bg-gray-900 dark:bg-gray-700 text-white'>
             <tr>
-              <th className='w-1/5 py-2'>Job ID</th>
-              <th className='w-1/5 py-2'>Fine Tuned Model</th>
-              <th className='w-1/5 py-2'>Status</th>
-              <th className='w-1/5 py-2'>Training File ID</th>
-              <th className='w-1/5 py-2'>File Name</th>
+              {sortableColumns.map((header, index) => (
+                <th
+                  key={index}
+                  className='sticky top-0 py-3 px-6 text-left font-medium cursor-pointer transition duration-200 bg-gray-500 bg-opacity-50 hover:bg-opacity-70 dark:bg-gray-700 dark:hover:bg-gray-800'
+                  onClick={() => sortData(header)}
+                >
+                  <div className='flex items-center justify-between'>
+                    {SORT_FIELDS[header]}
+                    {sortField === header && (
+                      <span>{sortDirection === 'asc' ? '▲' : '▼'}</span>
+                    )}
+                  </div>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className='text-gray-800 dark:text-gray-200'>
             {filteredJobs.map((job) => (
               <tr key={job.id} className='border-t dark:border-gray-700'>
                 <td className='py-2 px-4'>{job.id}</td>
+                <td className='py-2 px-4'>
+                  {new Date(job.created_at * 1000).toLocaleString()}
+                </td>
                 <td className='py-2 px-4'>{job.fine_tuned_model}</td>
                 <td className='py-2 px-4'>{job.status}</td>
                 <td className='py-2 px-4'>{job.training_file}</td>
