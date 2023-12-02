@@ -57,7 +57,7 @@ jobs:
 
       - name: Build
         env:
-          REPO_NAME: ${{ secrets.REPO_NAME }}/${{ env.DEPLOY_PATH }}
+          REPO_NAME: ${{ env.REPO_NAME }}/${{ env.DEPLOY_PATH }}
         run: |
           pnpm build
 
