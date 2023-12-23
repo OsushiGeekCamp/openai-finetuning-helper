@@ -6,6 +6,7 @@ interface HeaderProps {
   onFileNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleUpload: () => void | Promise<void>;
   isUploadDisabled: boolean;
+  downloadAsJsonl: () => void;
   copyToClipboardAsJsonl: () => void;
   examplesLength: number;
 }
@@ -25,6 +26,7 @@ const Header = ({
   onFileNameChange,
   handleUpload,
   isUploadDisabled,
+  downloadAsJsonl,
   copyToClipboardAsJsonl,
   examplesLength,
 }: HeaderProps) => (
@@ -49,8 +51,14 @@ const Header = ({
         Upload
       </Button>
       <Button
+        onClick={downloadAsJsonl}
+        className='ml-1 bg-green-500 text-white hover:bg-green-600 active:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 dark:active:bg-green-700'
+      >
+        Download
+      </Button>
+      <Button
         onClick={copyToClipboardAsJsonl}
-        className='ml-4 bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-700'
+        className='ml-1 bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-700'
       >
         Copy to Clipboard
       </Button>
