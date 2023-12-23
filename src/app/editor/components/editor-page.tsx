@@ -16,6 +16,7 @@ interface EditorPageProps {
   handleUpload: () => void | Promise<void>;
   isUploadDisabled: boolean;
   copyToClipboardAsJsonl: () => void;
+  downloadAsJsonl: () => void;
   examples: Example[];
   updateMessageInExample: (
     exampleIndex: number,
@@ -45,6 +46,7 @@ const EditorPage = ({
   handleUpload,
   isUploadDisabled,
   copyToClipboardAsJsonl,
+  downloadAsJsonl,
   examples,
   updateMessageInExample,
   addMessageToExample,
@@ -69,6 +71,7 @@ const EditorPage = ({
         onFileNameChange={handleFileNameChange}
         handleUpload={handleUpload}
         isUploadDisabled={isUploadDisabled}
+        downloadAsJsonl={downloadAsJsonl}
         copyToClipboardAsJsonl={copyToClipboardAsJsonl}
         examplesLength={examples.length}
       />
