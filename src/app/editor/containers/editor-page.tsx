@@ -69,8 +69,24 @@ const EditorPageContainer = ({
       .join('\n');
   };
 
+  const createJsonlBlob = (jsonlData: string) => {
+    return new Blob([jsonlData], { type: 'application/jsonl' });
+  };
+
   const copyToClipboardAsJsonl = () => {
     copyToClipboard(examplesToJsonl());
+  };
+
+  const downloadAsJsonl = () => {
+    const jsonlData = examplesToJsonl();
+    const file = createJsonlBlob(jsonlData);
+    const url = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleFileDrop = async (event: React.DragEvent<HTMLDivElement>) => {
@@ -103,7 +119,7 @@ const EditorPageContainer = ({
 
   async function handleUpload() {
     const jsonlData = examplesToJsonl();
-    const file = new Blob([jsonlData], { type: 'application/jsonl' });
+    const file = createJsonlBlob(jsonlData);
     const formData = new FormData();
     formData.append('file', file, fileName);
     formData.append('purpose', 'fine-tune');
@@ -180,6 +196,7 @@ const EditorPageContainer = ({
       handleUpload={handleUpload}
       isUploadDisabled={isUploadDisabled}
       copyToClipboardAsJsonl={copyToClipboardAsJsonl}
+      downloadAsJsonl={downloadAsJsonl}
       examples={examples}
       updateMessageInExample={updateMessageInExample}
       addMessageToExample={addMessageToExample}
