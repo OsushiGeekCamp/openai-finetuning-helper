@@ -41,7 +41,7 @@ const Header = ({
         value={fileName}
         onChange={onFileNameChange}
         className='p-2 border border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-md m-1 bg-white dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500 dark:focus:border-blue-700'
-        placeholder='File Name'
+        placeholder='File Name (JSONL)'
       />
       <Button
         onClick={handleUpload}
