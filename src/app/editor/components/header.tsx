@@ -6,13 +6,10 @@ interface HeaderProps {
   onFileNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleUpload: () => void | Promise<void>;
   isUploadDisabled: boolean;
+  downloadAsJsonl: () => void;
   copyToClipboardAsJsonl: () => void;
   examplesLength: number;
 }
-
-const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-};
 
 const getUploadButtonClasses = (isDisabled: boolean) =>
   isDisabled
@@ -29,34 +26,39 @@ const Header = ({
   onFileNameChange,
   handleUpload,
   isUploadDisabled,
+  downloadAsJsonl,
   copyToClipboardAsJsonl,
   examplesLength,
 }: HeaderProps) => (
   <header className='container mx-auto sticky top-0 z-50 bg-white dark:bg-gray-800 p-4 flex justify-between items-center whitespace-nowrap overflow-x-auto'>
     <div className='flex items-center'>
-      <form onSubmit={handleFormSubmit}>
-        <label className='sr-only' htmlFor='filenameInput'>
-          File Name
-        </label>
-        <input
-          id='filenameInput'
-          type='text'
-          value={fileName}
-          onChange={onFileNameChange}
-          className='p-2 border border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-md m-1 bg-white dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500 dark:focus:border-blue-700'
-          placeholder='File Name'
-        />
-        <Button
-          onClick={handleUpload}
-          className={getUploadButtonClasses(isUploadDisabled)}
-          disabled={isUploadDisabled}
-        >
-          Upload
-        </Button>
-      </form>
+      <label className='sr-only' htmlFor='filenameInput'>
+        File Name
+      </label>
+      <input
+        id='filenameInput'
+        type='text'
+        value={fileName}
+        onChange={onFileNameChange}
+        className='p-2 border border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-md m-1 bg-white dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500 dark:focus:border-blue-700'
+        placeholder='File Name (JSONL)'
+      />
+      <Button
+        onClick={handleUpload}
+        className={getUploadButtonClasses(isUploadDisabled)}
+        disabled={isUploadDisabled}
+      >
+        Upload
+      </Button>
+      <Button
+        onClick={downloadAsJsonl}
+        className='ml-1 bg-green-500 text-white hover:bg-green-600 active:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 dark:active:bg-green-700'
+      >
+        Download
+      </Button>
       <Button
         onClick={copyToClipboardAsJsonl}
-        className='ml-4 bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-700'
+        className='ml-1 bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-700'
       >
         Copy to Clipboard
       </Button>
