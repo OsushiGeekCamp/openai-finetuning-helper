@@ -61,6 +61,19 @@ const EditorPageContainer = ({
     );
   }, [apiKey, fileName, examples]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   const examplesToJsonl = () => {
     return examples
       .map((example) => {
