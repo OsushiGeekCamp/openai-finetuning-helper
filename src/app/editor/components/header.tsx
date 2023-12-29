@@ -8,6 +8,7 @@ interface HeaderProps {
   isUploadDisabled: boolean;
   downloadAsJsonl: () => void;
   copyToClipboardAsJsonl: () => void;
+  tokenCount: number;
   examplesLength: number;
 }
 
@@ -16,11 +17,6 @@ const getUploadButtonClasses = (isDisabled: boolean) =>
     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
     : 'bg-orange-500 text-white hover:bg-orange-600 active:bg-orange-700 dark:bg-orange-700 dark:hover:bg-orange-600 dark:active:bg-orange-700';
 
-const getExamplesClasses = (length: number) =>
-  `bg-gray-200 dark:bg-gray-700 p-2 ml-4 rounded-lg flex-shrink-0 ${
-    length < 10 ? 'text-red-500' : ''
-  }`;
-
 const Header = ({
   fileName,
   onFileNameChange,
@@ -28,6 +24,7 @@ const Header = ({
   isUploadDisabled,
   downloadAsJsonl,
   copyToClipboardAsJsonl,
+  tokenCount,
   examplesLength,
 }: HeaderProps) => (
   <header className='container mx-auto sticky top-0 z-50 bg-white dark:bg-gray-800 p-4 flex justify-between items-center whitespace-nowrap overflow-x-auto'>
@@ -63,13 +60,24 @@ const Header = ({
         Copy to Clipboard
       </Button>
     </div>
-    <div
-      title={examplesLength < 10 ? 'A minimum of 10 examples is required.' : ''}
-      className={getExamplesClasses(examplesLength)}
-    >
-      <span className='text-xl font-medium'>
-        {examplesLength} example{examplesLength !== 1 ? 's' : ''}
-      </span>
+    <div className='flex'>
+      <div className='bg-gray-200 dark:bg-gray-700 p-2 ml-4 rounded-lg flex-shrink-0'>
+        <span className='text-xl font-medium'>
+          {tokenCount} token{tokenCount !== 1 ? 's' : ''}
+        </span>
+      </div>
+      <div
+        title={
+          examplesLength < 10 ? 'A minimum of 10 examples is required.' : ''
+        }
+        className={`bg-gray-200 dark:bg-gray-700 p-2 ml-4 rounded-lg flex-shrink-0 ${
+          length < 10 ? 'text-red-500' : ''
+        }`}
+      >
+        <span className='text-xl font-medium'>
+          {examplesLength} example{examplesLength !== 1 ? 's' : ''}
+        </span>
+      </div>
     </div>
   </header>
 );
