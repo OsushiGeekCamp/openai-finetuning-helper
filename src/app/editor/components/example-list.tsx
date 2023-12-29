@@ -23,21 +23,18 @@ const ExampleList = ({
   addMessageToExample,
   removeMessageFromExample,
   removeExample,
-}: ExampleListProps) => (
-  <div>
-    {examples.map((example, exampleIndex) => (
-      <div key={exampleIndex} className='mb-4 overflow-x-auto'>
-        <MessageList
-          messages={example.messages}
-          updateMessageInExample={updateMessageInExample}
-          addMessageToExample={addMessageToExample}
-          removeMessageFromExample={removeMessageFromExample}
-          exampleIndex={exampleIndex}
-          removeExample={removeExample}
-        />
-      </div>
-    ))}
-  </div>
-);
+}: ExampleListProps) =>
+  examples.map((example, exampleIndex) => (
+    <div key={exampleIndex} className='mb-4 overflow-x-auto'>
+      <MessageList
+        messages={example.messages}
+        updateMessageInExample={updateMessageInExample}
+        addMessageToExample={addMessageToExample}
+        removeMessageFromExample={removeMessageFromExample}
+        exampleIndex={exampleIndex}
+        removeExample={removeExample}
+      />
+    </div>
+  ));
 
 export default ExampleList;
