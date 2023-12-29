@@ -30,6 +30,11 @@ const examplesFromJsonl = (jsonl?: string) => {
   }
 };
 
+const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  event.preventDefault();
+  event.returnValue = '';
+};
+
 const calculateTotalTokenCount = (examples: Example[]) => {
   return examples.reduce((count, example) => {
     return (
@@ -76,6 +81,14 @@ const EditorPageContainer = ({
       !apiKey || fileName.length === 0 || examples.length === 0,
     );
   }, [apiKey, fileName, examples]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     setTotalTokenCount(calculateTotalTokenCount(examples));
