@@ -1,5 +1,6 @@
 'use client';
 
+import { getEncoding } from 'js-tiktoken';
 import { useEffect, useReducer, useState } from 'react';
 
 import { copyToClipboard } from '@/utils/clipboard';
@@ -10,6 +11,8 @@ import { getApiKey } from '@/utils/openai'; // Get the API key using getApiKey f
 
 import { examplesReducer } from '../reducers/examples';
 import EditorPage from '../components/editor-page';
+
+const encoding = getEncoding('cl100k_base');
 
 const examplesFromJsonl = (jsonl?: string) => {
   const defaultExamples: Example[] = [
@@ -25,6 +28,18 @@ const examplesFromJsonl = (jsonl?: string) => {
   } catch (e) {
     return defaultExamples;
   }
+};
+
+const calculateTotalTokenCount = (examples: Example[]) => {
+  return examples.reduce((count, example) => {
+    return (
+      count +
+      example.messages.reduce(
+        (count, message) => count + encoding.encode(message.content).length,
+        0,
+      )
+    );
+  }, 0);
 };
 
 const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -50,6 +65,7 @@ const EditorPageContainer = ({
   const [defaultFirstMessage, setDefaultFirstMessage] = useState('');
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [isUploadDisabled, setIsUploadDisabled] = useState(false);
+  const [totalTokenCount, setTotalTokenCount] = useState(0); // Add this state
 
   useEffect(() => {
     setApiKey(getApiKey()?.trim() ?? null);
@@ -74,6 +90,10 @@ const EditorPageContainer = ({
     };
   }, []);
 
+  useEffect(() => {
+    setTotalTokenCount(calculateTotalTokenCount(examples));
+  }, [examples]);
+
   const examplesToJsonl = () => {
     return examples
       .map((example) => {
@@ -82,8 +102,24 @@ const EditorPageContainer = ({
       .join('\n');
   };
 
+  const createJsonlBlob = (jsonlData: string) => {
+    return new Blob([jsonlData], { type: 'application/jsonl' });
+  };
+
   const copyToClipboardAsJsonl = () => {
     copyToClipboard(examplesToJsonl());
+  };
+
+  const downloadAsJsonl = () => {
+    const jsonlData = examplesToJsonl();
+    const file = createJsonlBlob(jsonlData);
+    const url = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleFileDrop = async (event: React.DragEvent<HTMLDivElement>) => {
@@ -116,7 +152,7 @@ const EditorPageContainer = ({
 
   async function handleUpload() {
     const jsonlData = examplesToJsonl();
-    const file = new Blob([jsonlData], { type: 'application/jsonl' });
+    const file = createJsonlBlob(jsonlData);
     const formData = new FormData();
     formData.append('file', file, fileName);
     formData.append('purpose', 'fine-tune');
@@ -193,6 +229,8 @@ const EditorPageContainer = ({
       handleUpload={handleUpload}
       isUploadDisabled={isUploadDisabled}
       copyToClipboardAsJsonl={copyToClipboardAsJsonl}
+      downloadAsJsonl={downloadAsJsonl}
+      totalTokenCount={totalTokenCount}
       examples={examples}
       updateMessageInExample={updateMessageInExample}
       addMessageToExample={addMessageToExample}

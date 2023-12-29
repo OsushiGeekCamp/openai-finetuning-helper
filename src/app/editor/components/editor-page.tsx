@@ -16,6 +16,8 @@ interface EditorPageProps {
   handleUpload: () => void | Promise<void>;
   isUploadDisabled: boolean;
   copyToClipboardAsJsonl: () => void;
+  downloadAsJsonl: () => void;
+  totalTokenCount: number;
   examples: Example[];
   updateMessageInExample: (
     exampleIndex: number,
@@ -45,6 +47,8 @@ const EditorPage = ({
   handleUpload,
   isUploadDisabled,
   copyToClipboardAsJsonl,
+  downloadAsJsonl,
+  totalTokenCount,
   examples,
   updateMessageInExample,
   addMessageToExample,
@@ -69,7 +73,9 @@ const EditorPage = ({
         onFileNameChange={handleFileNameChange}
         handleUpload={handleUpload}
         isUploadDisabled={isUploadDisabled}
+        downloadAsJsonl={downloadAsJsonl}
         copyToClipboardAsJsonl={copyToClipboardAsJsonl}
+        tokenCount={totalTokenCount}
         examplesLength={examples.length}
       />
       <main className='container mx-auto pt-0 pr-4 pb-4 pl-4'>

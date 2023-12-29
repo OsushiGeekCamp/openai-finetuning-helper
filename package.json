@@ -13,13 +13,14 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "js-tiktoken": "^1.0.8",
     "material-symbols": "^0.14.3",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
     "@types/jest": "^29.5.11",
