@@ -71,7 +71,7 @@ const Header = ({
           examplesLength < 10 ? 'A minimum of 10 examples is required.' : ''
         }
         className={`bg-gray-200 dark:bg-gray-700 p-2 ml-4 rounded-lg flex-shrink-0 ${
-          length < 10 ? 'text-red-500' : ''
+          examplesLength < 10 ? 'text-red-500' : ''
         }`}
       >
         <span className='text-xl font-medium'>
