@@ -30,6 +30,11 @@ const examplesFromJsonl = (jsonl?: string) => {
   }
 };
 
+const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  event.preventDefault();
+  event.returnValue = '';
+};
+
 const calculateTotalTokenCount = (examples: Example[]) => {
   return examples.reduce((count, example) => {
     return (
@@ -78,11 +83,6 @@ const EditorPageContainer = ({
   }, [apiKey, fileName, examples]);
 
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
