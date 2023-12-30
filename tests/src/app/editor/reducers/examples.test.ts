@@ -1,16 +1,28 @@
 import { Example } from '@/types/example';
 import { Message } from '@/types/message';
-import { defaultRole } from '@/types/role';
+import { defaultRole, Role } from '@/types/role';
 import { examplesReducer } from '../../../../../src/app/editor/reducers/examples';
 
 describe('examplesReducer', () => {
+  const helloText = 'Hello';
+  const initialMessage: Message = {
+    role: 'user',
+    content: helloText,
+    tokenCount: helloText.length,
+  };
   const initialExamples: Example[] = [
-    { messages: [{ role: 'user', content: 'Hello' }] },
+    { messages: [initialMessage], tokenCount: helloText.length },
   ];
 
   it('should handle SET_EXAMPLES', () => {
+    const content = 'Hi';
     const newExamples: Example[] = [
-      { messages: [{ role: 'user', content: 'Hi' }] },
+      {
+        messages: [
+          { role: 'user', content: content, tokenCount: content.length },
+        ],
+        tokenCount: content.length,
+      },
     ];
     const action: { type: 'SET_EXAMPLES'; examples: Example[] } = {
       type: 'SET_EXAMPLES',
@@ -29,11 +41,16 @@ describe('examplesReducer', () => {
     expect(state).toHaveLength(2);
     expect(state[1].messages[0].role).toEqual(defaultRole);
     expect(state[1].messages[0].content).toEqual('');
+    expect(state[1].messages[0].tokenCount).toEqual(0);
   });
 
   it('should handle ADD_EXAMPLE', () => {
+    const content = 'New message';
     const newExample: Example = {
-      messages: [{ role: 'user', content: 'New message' }],
+      messages: [
+        { role: 'user', content: content, tokenCount: content.length },
+      ],
+      tokenCount: content.length,
     };
     const action: { type: 'ADD_EXAMPLE'; example: Example } = {
       type: 'ADD_EXAMPLE',
@@ -44,21 +61,47 @@ describe('examplesReducer', () => {
     expect(state[1]).toEqual(newExample);
   });
 
-  it('should handle UPDATE_MESSAGE', () => {
-    const newMessage: Message = { role: 'user', content: 'Updated message' };
+  it('should handle UPDATE_MESSAGE_ROLE', () => {
+    const newRole = 'assistant';
+    const newMessage: Message = { ...initialMessage, role: newRole };
     const action: {
-      type: 'UPDATE_MESSAGE';
+      type: 'UPDATE_MESSAGE_ROLE';
       exampleIndex: number;
       messageIndex: number;
-      message: Message;
+      newRole: Role;
     } = {
-      type: 'UPDATE_MESSAGE',
+      type: 'UPDATE_MESSAGE_ROLE',
       exampleIndex: 0,
       messageIndex: 0,
-      message: newMessage,
+      newRole,
     };
     const state = examplesReducer(initialExamples, action);
     expect(state[0].messages[0]).toEqual(newMessage);
+  });
+
+  it('should handle UPDATE_MESSAGE_CONTENT', () => {
+    const newContent = 'Updated message';
+    const newMessage: Message = {
+      ...initialMessage,
+      content: newContent,
+      tokenCount: newContent.length,
+    };
+    const action: {
+      type: 'UPDATE_MESSAGE_CONTENT';
+      exampleIndex: number;
+      messageIndex: number;
+      newContent: string;
+      getTokenCount: (content: string) => number;
+    } = {
+      type: 'UPDATE_MESSAGE_CONTENT',
+      exampleIndex: 0,
+      messageIndex: 0,
+      newContent,
+      getTokenCount: (content: string) => content.length,
+    };
+    const state = examplesReducer(initialExamples, action);
+    expect(state[0].messages[0]).toEqual(newMessage);
+    expect(state[0].tokenCount).toEqual(newContent.length);
   });
 
   it('should handle ADD_MESSAGE_TO_EXAMPLE', () => {

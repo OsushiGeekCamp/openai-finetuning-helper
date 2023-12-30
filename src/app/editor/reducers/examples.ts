@@ -1,4 +1,4 @@
-import { defaultRole } from '@/types/role';
+import { defaultRole, Role } from '@/types/role';
 import { Message } from '@/types/message';
 import { Example } from '@/types/example';
 
@@ -7,10 +7,17 @@ type Action =
   | { type: 'ADD_DEFAULT_EXAMPLE' }
   | { type: 'ADD_EXAMPLE'; example: Example }
   | {
-      type: 'UPDATE_MESSAGE';
+      type: 'UPDATE_MESSAGE_ROLE';
       exampleIndex: number;
       messageIndex: number;
-      message: Message;
+      newRole: Role;
+    }
+  | {
+      type: 'UPDATE_MESSAGE_CONTENT';
+      exampleIndex: number;
+      messageIndex: number;
+      newContent: string;
+      getTokenCount: (content: string) => number;
     }
   | { type: 'ADD_MESSAGE_TO_EXAMPLE'; exampleIndex: number }
   | {
@@ -44,20 +51,43 @@ export const examplesReducer = (
       return action.examples;
 
     case 'ADD_DEFAULT_EXAMPLE':
-      return [...examples, { messages: [{ role: defaultRole, content: '' }] }];
+      return [
+        ...examples,
+        {
+          messages: [{ role: defaultRole, content: '', tokenCount: 0 }],
+          tokenCount: 0,
+        },
+      ];
 
     case 'ADD_EXAMPLE':
       return [...examples, action.example];
 
-    case 'UPDATE_MESSAGE':
+    case 'UPDATE_MESSAGE_ROLE':
       currentMessages = examples[action.exampleIndex].messages;
       newExamples = updateItemInArray(examples, action.exampleIndex, {
         ...examples[action.exampleIndex],
-        messages: updateItemInArray(
-          currentMessages,
-          action.messageIndex,
-          action.message,
-        ),
+        messages: updateItemInArray(currentMessages, action.messageIndex, {
+          ...currentMessages[action.messageIndex],
+          role: action.newRole,
+        }),
+      });
+      return newExamples;
+
+    case 'UPDATE_MESSAGE_CONTENT':
+      const currentExample = examples[action.exampleIndex];
+      currentMessages = currentExample.messages;
+      const currentMessage = currentMessages[action.messageIndex];
+      const tokenDiff =
+        action.getTokenCount(action.newContent) - currentMessage.tokenCount;
+
+      newExamples = updateItemInArray(examples, action.exampleIndex, {
+        ...examples[action.exampleIndex],
+        messages: updateItemInArray(currentMessages, action.messageIndex, {
+          ...currentMessage,
+          content: action.newContent,
+          tokenCount: currentMessage.tokenCount + tokenDiff,
+        }),
+        tokenCount: currentExample.tokenCount + tokenDiff,
       });
       return newExamples;
 
@@ -65,7 +95,10 @@ export const examplesReducer = (
       currentMessages = examples[action.exampleIndex].messages;
       newExamples = updateItemInArray(examples, action.exampleIndex, {
         ...examples[action.exampleIndex],
-        messages: [...currentMessages, { role: defaultRole, content: '' }],
+        messages: [
+          ...currentMessages,
+          { role: defaultRole, content: '', tokenCount: 0 },
+        ],
       });
       return newExamples;
 

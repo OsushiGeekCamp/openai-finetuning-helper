@@ -1,5 +1,4 @@
 import { Example } from '@/types/example';
-import { Message } from '@/types/message';
 import { Role } from '@/types/role';
 import ToggleSwitch from '@/components/toggle-switch';
 
@@ -19,10 +18,16 @@ interface EditorPageProps {
   downloadAsJsonl: () => void;
   totalTokenCount: number;
   examples: Example[];
-  updateMessageInExample: (
+  maxTokenCount: number;
+  onMessageRoleChange: (
     exampleIndex: number,
     messageIndex: number,
-    changedMessage: Message,
+    newRole: Role,
+  ) => void;
+  onMessageContentChange: (
+    exampleIndex: number,
+    messageIndex: number,
+    newContent: string,
   ) => void;
   addMessageToExample: (exampleIndex: number) => void;
   removeMessageFromExample: (
@@ -50,7 +55,9 @@ const EditorPage = ({
   downloadAsJsonl,
   totalTokenCount,
   examples,
-  updateMessageInExample,
+  maxTokenCount,
+  onMessageRoleChange,
+  onMessageContentChange,
   addMessageToExample,
   removeMessageFromExample,
   removeExample,
@@ -93,9 +100,11 @@ const EditorPage = ({
               content={defaultFirstMessage}
               rows={2}
               contentPlaceholder='First Message Content'
-              onRoleChange={(changedMessage) => {
-                setDefaultFirstRole(changedMessage.role);
-                setDefaultFirstMessage(changedMessage.content);
+              onRoleChange={(newRole) => {
+                setDefaultFirstRole(newRole);
+              }}
+              onContentChange={(newContent) => {
+                setDefaultFirstMessage(newContent);
               }}
               ariaLabel='First Message Content'
             />
@@ -103,14 +112,16 @@ const EditorPage = ({
         )}
         <ExampleList
           examples={examples}
-          updateMessageInExample={updateMessageInExample}
+          maxTokenCount={maxTokenCount}
+          onMessageRoleChange={onMessageRoleChange}
+          onMessageContentChange={onMessageContentChange}
           addMessageToExample={addMessageToExample}
           removeMessageFromExample={removeMessageFromExample}
           removeExample={removeExample}
         />
         <Button
           onClick={addNewExample}
-          className='bg-green-500 ml-1 text-white dark:bg-green-700 hover:bg-green-600 active:bg-green-700'
+          className='bg-green-500 ml-1 mb-10 text-white dark:bg-green-700 hover:bg-green-600 active:bg-green-700'
           ariaLabel='Add New Example'
         >
           Add New Example

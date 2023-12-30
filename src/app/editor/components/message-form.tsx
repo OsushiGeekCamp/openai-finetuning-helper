@@ -1,4 +1,3 @@
-import { Message } from '@/types/message';
 import { Role } from '@/types/role';
 
 interface MessageFormProps {
@@ -7,7 +6,8 @@ interface MessageFormProps {
   rows: number;
   contentPlaceholder: string;
   ariaLabel: string;
-  onRoleChange: (updatedForm: Message) => void;
+  onRoleChange: (newRole: Role) => void;
+  onContentChange: (newContent: string) => void;
   removeExample?: () => void;
 }
 
@@ -21,16 +21,13 @@ const MessageForm: React.FC<MessageFormProps> = ({
   contentPlaceholder,
   ariaLabel,
   onRoleChange,
+  onContentChange,
   removeExample,
 }) => {
   const handleRoleChange = (newRole: string) => {
     if (['system', 'user', 'assistant'].includes(newRole)) {
-      onRoleChange({ role: newRole as Role, content });
+      onRoleChange(newRole as Role);
     }
-  };
-
-  const handleMessageChange = (newContent: string) => {
-    onRoleChange({ role, content: newContent });
   };
 
   return (
@@ -59,7 +56,7 @@ const MessageForm: React.FC<MessageFormProps> = ({
       <textarea
         placeholder={contentPlaceholder}
         value={content}
-        onChange={(e) => handleMessageChange(e.target.value)}
+        onChange={(e) => onContentChange(e.target.value)}
         className={InputStyling}
         {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
         rows={rows}

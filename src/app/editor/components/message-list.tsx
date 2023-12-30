@@ -1,13 +1,19 @@
 import { Message } from '@/types/message';
+import { Role } from '@/types/role';
 import Button from './button';
 import MessageForm from './message-form';
 
 type MessageListProps = {
   messages: Message[];
-  updateMessageInExample: (
+  onRoleChange: (
     exampleIndex: number,
     messageIndex: number,
-    changedMessage: any,
+    newRole: Role,
+  ) => void;
+  onContentChange: (
+    exampleIndex: number,
+    messageIndex: number,
+    newContent: string,
   ) => void;
   addMessageToExample: (exampleIndex: number) => void;
   removeMessageFromExample: (
@@ -20,7 +26,8 @@ type MessageListProps = {
 
 const MessageList = ({
   messages,
-  updateMessageInExample,
+  onRoleChange,
+  onContentChange,
   addMessageToExample,
   removeMessageFromExample,
   removeExample,
@@ -34,8 +41,11 @@ const MessageList = ({
         content={message.content}
         rows={4}
         contentPlaceholder='Message Content'
-        onRoleChange={(changedMessage) =>
-          updateMessageInExample(exampleIndex, messageIndex, changedMessage)
+        onRoleChange={(newRole) =>
+          onRoleChange(exampleIndex, messageIndex, newRole)
+        }
+        onContentChange={(newContent) =>
+          onContentChange(exampleIndex, messageIndex, newContent)
         }
         removeExample={() =>
           removeMessageFromExample(exampleIndex, messageIndex)
