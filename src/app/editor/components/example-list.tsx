@@ -1,13 +1,20 @@
 import { Example } from '@/types/example';
-import { Message } from '@/types/message';
+import { Role } from '@/types/role';
 import MessageList from './message-list';
+import CircularIndicator from './circular-indicator';
 
 type ExampleListProps = {
   examples: Example[];
-  updateMessageInExample: (
+  maxTokenCount: number;
+  onMessageRoleChange: (
     exampleIndex: number,
     messageIndex: number,
-    changedMessage: Message,
+    newRole: Role,
+  ) => void;
+  onMessageContentChange: (
+    exampleIndex: number,
+    messageIndex: number,
+    newContent: string,
   ) => void;
   addMessageToExample: (exampleIndex: number) => void;
   removeMessageFromExample: (
@@ -19,21 +26,29 @@ type ExampleListProps = {
 
 const ExampleList = ({
   examples,
-  updateMessageInExample,
+  maxTokenCount,
+  onMessageRoleChange,
+  onMessageContentChange,
   addMessageToExample,
   removeMessageFromExample,
   removeExample,
 }: ExampleListProps) =>
   examples.map((example, exampleIndex) => (
-    <div key={exampleIndex} className='mb-4 overflow-x-auto'>
-      <MessageList
-        messages={example.messages}
-        updateMessageInExample={updateMessageInExample}
-        addMessageToExample={addMessageToExample}
-        removeMessageFromExample={removeMessageFromExample}
-        exampleIndex={exampleIndex}
-        removeExample={removeExample}
-      />
+    <div key={exampleIndex} className='flex'>
+      <div className='flex items-center'>
+        <CircularIndicator value={example.tokenCount} max={maxTokenCount} />
+      </div>
+      <div className=' mb-4 overflow-x-auto'>
+        <MessageList
+          messages={example.messages}
+          onRoleChange={onMessageRoleChange}
+          onContentChange={onMessageContentChange}
+          addMessageToExample={addMessageToExample}
+          removeMessageFromExample={removeMessageFromExample}
+          exampleIndex={exampleIndex}
+          removeExample={removeExample}
+        />
+      </div>
     </div>
   ));
 
