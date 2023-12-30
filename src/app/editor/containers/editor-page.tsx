@@ -6,24 +6,65 @@ import { useEffect, useReducer, useState } from 'react';
 import { copyToClipboard } from '@/utils/clipboard';
 import { Example } from '@/types/example';
 import { Message } from '@/types/message';
-import { defaultRole } from '@/types/role';
+import { defaultRole, Role } from '@/types/role';
 import { getApiKey } from '@/utils/openai'; // Get the API key using getApiKey function
 
 import { examplesReducer } from '../reducers/examples';
 import EditorPage from '../components/editor-page';
 
+type MessageSerialized = Omit<Message, 'tokenCount'>;
+type ExampleSerialized = {
+  messages: MessageSerialized[];
+};
+
 const encoding = getEncoding('cl100k_base');
+
+const getTokenCount = (text: string) => encoding.encode(text).length;
+
+const messageDeserialize = (message: MessageSerialized): Message => {
+  return {
+    ...message,
+    tokenCount: encoding.encode(message.content).length,
+  };
+};
+
+const exampleDeserialize = (example: ExampleSerialized): Example => {
+  const messages = example.messages.map(messageDeserialize);
+  return {
+    messages: messages,
+    tokenCount: messages.reduce(
+      (count, message) => count + message.tokenCount,
+      0,
+    ),
+  };
+};
+
+const messageSerialize = (message: Message): MessageSerialized => {
+  return {
+    ...message,
+  };
+};
+
+const exampleSerialize = (example: Example): ExampleSerialized => {
+  return {
+    messages: example.messages.map(messageSerialize),
+  };
+};
 
 const examplesFromJsonl = (jsonl?: string) => {
   const defaultExamples: Example[] = [
-    { messages: [{ role: defaultRole, content: '' }] },
+    {
+      messages: [{ role: defaultRole, content: '', tokenCount: 0 }],
+      tokenCount: 0,
+    },
   ];
   if (!jsonl) {
     return defaultExamples;
   }
   try {
     return jsonl.split('\n').map((line) => {
-      return JSON.parse(line) as Example;
+      const exampleSerialized = JSON.parse(line) as ExampleSerialized;
+      return exampleDeserialize(exampleSerialized);
     });
   } catch (e) {
     return defaultExamples;
@@ -35,17 +76,8 @@ const handleBeforeUnload = (event: BeforeUnloadEvent) => {
   event.returnValue = '';
 };
 
-const calculateTotalTokenCount = (examples: Example[]) => {
-  return examples.reduce((count, example) => {
-    return (
-      count +
-      example.messages.reduce(
-        (count, message) => count + encoding.encode(message.content).length,
-        0,
-      )
-    );
-  }, 0);
-};
+const calculateTotalTokenCount = (examples: Example[]) =>
+  examples.reduce((count, example) => count + example.tokenCount, 0);
 
 const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
   event.preventDefault();
@@ -68,9 +100,10 @@ const EditorPageContainer = ({
   const [showFirstMessage, setShowFirstMessage] = useState(true);
   const [defaultFirstRole, setDefaultFirstRole] = useState(defaultRole);
   const [defaultFirstMessage, setDefaultFirstMessage] = useState('');
+  const [defaultFirstMessageToken, setDefaultFirstMessageToken] = useState(0);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [isUploadDisabled, setIsUploadDisabled] = useState(false);
-  const [totalTokenCount, setTotalTokenCount] = useState(0); // Add this state
+  const [totalTokenCount, setTotalTokenCount] = useState(0);
 
   useEffect(() => {
     setApiKey(getApiKey()?.trim() ?? null);
@@ -94,10 +127,16 @@ const EditorPageContainer = ({
     setTotalTokenCount(calculateTotalTokenCount(examples));
   }, [examples]);
 
+  useEffect(() => {
+    const defaultFirstMessageToken =
+      encoding.encode(defaultFirstMessage).length;
+    setDefaultFirstMessageToken(defaultFirstMessageToken);
+  }, [defaultFirstMessage]);
+
   const examplesToJsonl = () => {
     return examples
       .map((example) => {
-        return JSON.stringify(example);
+        return JSON.stringify(exampleSerialize(example));
       })
       .join('\n');
   };
@@ -180,7 +219,14 @@ const EditorPageContainer = ({
       dispatchExamples({
         type: 'ADD_EXAMPLE',
         example: {
-          messages: [{ role: defaultFirstRole, content: defaultFirstMessage }],
+          messages: [
+            {
+              role: defaultFirstRole,
+              content: defaultFirstMessage,
+              tokenCount: defaultFirstMessageToken,
+            },
+          ],
+          tokenCount: defaultFirstMessageToken,
         },
       });
     } else {
@@ -188,16 +234,30 @@ const EditorPageContainer = ({
     }
   };
 
-  const updateMessageInExample = (
+  const onMessageRoleChange = (
     exampleIndex: number,
     messageIndex: number,
-    message: Message,
+    newRole: Role,
   ) => {
     dispatchExamples({
-      type: 'UPDATE_MESSAGE',
+      type: 'UPDATE_MESSAGE_ROLE',
       exampleIndex,
-      messageIndex: messageIndex,
-      message,
+      messageIndex,
+      newRole,
+    });
+  };
+
+  const onMessageContentChange = (
+    exampleIndex: number,
+    messageIndex: number,
+    newContent: string,
+  ) => {
+    dispatchExamples({
+      type: 'UPDATE_MESSAGE_CONTENT',
+      exampleIndex,
+      messageIndex,
+      newContent,
+      getTokenCount,
     });
   };
 
@@ -232,7 +292,9 @@ const EditorPageContainer = ({
       downloadAsJsonl={downloadAsJsonl}
       totalTokenCount={totalTokenCount}
       examples={examples}
-      updateMessageInExample={updateMessageInExample}
+      maxTokenCount={16385}
+      onMessageRoleChange={onMessageRoleChange}
+      onMessageContentChange={onMessageContentChange}
       addMessageToExample={addMessageToExample}
       removeMessageFromExample={removeMessageFromExample}
       removeExample={removeExample}
