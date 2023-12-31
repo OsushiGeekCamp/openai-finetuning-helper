@@ -56,7 +56,8 @@ const MessageList = ({
     <div className='flex flex-col my-1'>
       <Button
         onClick={() => addMessageToExample(exampleIndex)}
-        className='h-1/2 bg-blue-500 text-white dark:bg-blue-700 hover:bg-blue-600 active:bg-blue-700 mb-2'
+        className='h-1/2 mb-2 text-blue-500 dark:text-blue-700 hover:text-blue-600 active:text-blue-700 dark:hover:text-blue-600 dark:active:text-blue-700
+        border border-blue-500 dark:border-blue-700 hover:border-blue-600 active:border-blue-700 dark:hover:border-blue-600 dark:active:border-blue-700'
         ariaLabel={`Add New Message to [${exampleIndex + 1}] Example`}
       >
         Add New
@@ -66,7 +67,8 @@ const MessageList = ({
 
       <Button
         onClick={() => removeExample(exampleIndex)}
-        className='h-1/2 bg-red-500 text-white dark:bg-red-700 hover:bg-red-600 active:bg-red-700'
+        className='h-1/2 text-red-500 dark:text-red-700 hover:text-red-600 active:text-red-700 dark:hover:text-red-600 dark:active:text-red-700 
+        border border-red-500 dark:border-red-700 hover:border-red-600 active:border-red-700 dark:hover:border-red-600 dark:active:border-red-700'
         ariaLabel={`Remove [${exampleIndex + 1}] Example`}
       >
         Remove This
