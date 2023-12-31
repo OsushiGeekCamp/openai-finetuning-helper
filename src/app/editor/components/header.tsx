@@ -14,8 +14,8 @@ interface HeaderProps {
 
 const getUploadButtonClasses = (isDisabled: boolean) =>
   isDisabled
-    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-    : 'bg-orange-500 text-white hover:bg-orange-600 active:bg-orange-700 dark:bg-orange-700 dark:hover:bg-orange-600 dark:active:bg-orange-700';
+    ? 'text-gray-300 dark:text-gray-700 cursor-not-allowed border border-gray-300 dark:border-gray-700'
+    : 'text-yellow-500 hover:text-yellow-600 active:text-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-700 border border-yellow-500 dark:border-yellow-700 hover:border-yellow-600 active:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700';
 
 const Header = ({
   fileName,
@@ -49,19 +49,21 @@ const Header = ({
       </Button>
       <Button
         onClick={downloadAsJsonl}
-        className='ml-1 bg-green-500 text-white hover:bg-green-600 active:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 dark:active:bg-green-700'
+        className='ml-1 text-yellow-500 hover:text-yellow-600 active:text-yellow-700 dark:text-yellow-700 dark:hover:text-yellow-600 dark:active:text-yellow-700
+        border border-yellow-500 dark:border-yellow-700 hover:border-yellow-600 active:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700'
       >
         Download
       </Button>
       <Button
         onClick={copyToClipboardAsJsonl}
-        className='ml-1 bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-700'
+        className='ml-1 text-yellow-500 hover:text-yellow-600 active:text-yellow-700 dark:text-yellow-700 dark:hover:text-yellow-600 dark:active:text-yellow-700
+        border border-yellow-500 dark:border-yellow-700 hover:border-yellow-600 active:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700'
       >
         Copy to Clipboard
       </Button>
     </div>
     <div className='flex'>
-      <div className='bg-gray-200 dark:bg-gray-700 p-2 ml-4 rounded-lg flex-shrink-0'>
+      <div className='p-2 ml-4 rounded-lg flex-shrink-0 border-2 text-gray-500 dark:text-gray-300 border-gray-400 dark:border-gray-700'>
         <span className='text-xl font-medium'>
           {tokenCount} token{tokenCount !== 1 ? 's' : ''}
         </span>
@@ -70,8 +72,10 @@ const Header = ({
         title={
           examplesLength < 10 ? 'A minimum of 10 examples is required.' : ''
         }
-        className={`bg-gray-200 dark:bg-gray-700 p-2 ml-4 rounded-lg flex-shrink-0 ${
-          examplesLength < 10 ? 'text-red-500' : ''
+        className={`border-2 p-2 ml-4 rounded-lg flex-shrink-0 ${
+          examplesLength < 10
+            ? 'text-red-500 border-red-400 dark:border-red-700'
+            : 'text-gray-500 dark:text-gray-300 border-gray-400 dark:border-gray-700'
         }`}
       >
         <span className='text-xl font-medium'>
