@@ -16,7 +16,7 @@ const CircularIndicator = ({ value, max }: CircularIndicatorProps) => {
       : 'stroke-gray-300 dark:stroke-gray-400';
 
   return (
-    <div className='text-black dark:text-white relative'>
+    <div className='text-gray-500 dark:text-gray-300 relative'>
       <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}>
         <circle
           className={strokeColor}
