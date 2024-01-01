@@ -36,7 +36,7 @@ const ExampleList = ({
   examples.map((example, exampleIndex) => (
     <div key={exampleIndex} className='flex'>
       <div className='flex mx-2 relative'>
-        <div className='absolute text-gray-700 m-2'>{exampleIndex + 1}.</div>
+        <div className='absolute text-gray-600 mt-2'>{exampleIndex + 1}.</div>
         <div className='flex items-center'>
           <CircularIndicator value={example.tokenCount} max={maxTokenCount} />
         </div>
