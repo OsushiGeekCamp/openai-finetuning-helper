@@ -46,7 +46,8 @@ const MessageForm: React.FC<MessageFormProps> = ({
         {removeExample && (
           <button
             onClick={removeExample}
-            className='px-2 ml-2 bg-red-500 text-white rounded dark:bg-red-700 hover:bg-red-600 active:bg-red-700'
+            className='px-2 ml-2 rounded text-red-500 dark:text-red-700 hover:text-red-600 active:text-red-700 dark:hover:text-red-600 dark:active:text-red-700 
+            border border-red-500 dark:border-red-700 hover:border-red-600 active:border-red-700 dark:hover:border-red-600 dark:active:border-red-700'
             aria-label='Remove This Example'
           >
             Remove
