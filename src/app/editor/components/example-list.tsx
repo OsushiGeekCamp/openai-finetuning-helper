@@ -35,8 +35,11 @@ const ExampleList = ({
 }: ExampleListProps) =>
   examples.map((example, exampleIndex) => (
     <div key={exampleIndex} className='flex'>
-      <div className='flex items-center mx-2'>
-        <CircularIndicator value={example.tokenCount} max={maxTokenCount} />
+      <div className='flex mx-2 relative'>
+        <div className='absolute text-gray-600 mt-2'>{exampleIndex + 1}.</div>
+        <div className='flex items-center'>
+          <CircularIndicator value={example.tokenCount} max={maxTokenCount} />
+        </div>
       </div>
       <div className=' mb-4 overflow-x-auto'>
         <MessageList
