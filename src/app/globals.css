@@ -28,7 +28,9 @@ body {
 
 .material-symbols {
   font-family: var(--font-material-symbols);
-  font-variation-settings: 'opsz' 48, 'GRAD' -25;
+  font-variation-settings:
+    'opsz' 48,
+    'GRAD' -25;
 }
 
 .material-symbols-fill {
