@@ -1,14 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import localFont from 'next/font/local';
 import Link from 'next/link';
 
 import { fetchFiles } from '@/utils/openai';
 import Loading from '@/components/loading';
 import { getApiKey } from '@/utils/openai';
-
-import style from './styles.module.css';
 
 type File = {
   id: string;
@@ -157,7 +154,7 @@ const FileList = () => {
               {sortableColumns.map((header, index) => (
                 <th
                   key={index}
-                  className='sticky top-0 py-3 px-6 text-left font-medium cursor-pointer transition duration-200 bg-gray-500 bg-opacity-50 hover:bg-opacity-70 dark:bg-gray-700 dark:hover:bg-gray-800'
+                  className='sticky py-3 px-6 text-left font-medium cursor-pointer transition duration-200 rounded-lg border border-gray-900 dark:bg-gray-700 border-gray-500 border-opacity-50 hover:bg-opacity-70 dark:bg-gray-700 dark:hover:bg-gray-800'
                   onClick={() => sortData(header)}
                 >
                   <div className='flex items-center justify-between'>
@@ -172,7 +169,7 @@ const FileList = () => {
                   </div>
                 </th>
               ))}
-              <th className='sticky top-0 py-3 px-6 text-left font-medium flex justify-center bg-gray-500 bg-opacity-50'>
+              <th className='sticky py-3 px-6 text-left font-medium flex justify-center bg-gray-500 bg-opacity-50'>
                 Quick Start
               </th>
             </tr>
