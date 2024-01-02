@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const MaterialSymbols = localFont({
   variable: '--font-material-symbols',
-  src: '../../node_modules/material-symbols/material-symbols-outlined.woff2',
+  src: '../../node_modules/material-symbols/material-symbols-rounded.woff2',
   display: 'block',
 });
 
