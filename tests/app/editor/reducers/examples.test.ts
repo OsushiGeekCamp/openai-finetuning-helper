@@ -1,7 +1,7 @@
 import { Example } from '@/types/example';
 import { Message } from '@/types/message';
 import { defaultRole, Role } from '@/types/role';
-import { examplesReducer } from '../../../../../src/app/editor/reducers/examples';
+import { examplesReducer } from '../../../../src/app/editor/reducers/examples';
 
 describe('examplesReducer', () => {
   const helloText = 'Hello';
