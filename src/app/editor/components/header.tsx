@@ -14,8 +14,8 @@ interface HeaderProps {
 
 const getUploadButtonClasses = (isDisabled: boolean) =>
   isDisabled
-    ? 'text-gray-300 dark:text-gray-700 cursor-not-allowed border border-gray-300 dark:border-gray-700'
-    : 'text-yellow-500 hover:text-yellow-600 active:text-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-700 border border-yellow-500 dark:border-yellow-700 hover:border-yellow-600 active:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700';
+    ? 'text-gray-300 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-500'
+    : 'text-yellow-500 dark:text-yellow-700 hover:text-yellow-600 active:text-yellow-700 dark:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700 border border-yellow-500 dark:border-yellow-700 hover:border-yellow-600 active:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700';
 
 const Header = ({
   fileName,
