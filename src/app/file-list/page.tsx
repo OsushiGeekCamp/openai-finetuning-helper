@@ -163,7 +163,11 @@ const FileList = () => {
                   <div className='flex items-center justify-between'>
                     {header}
                     {sortField === header && (
-                      <span>{sortDirection === 'asc' ? '▲' : '▼'}</span>
+                      <span className='material-symbols'>
+                        {sortDirection === 'asc'
+                          ? 'expand_less'
+                          : 'expand_more'}
+                      </span>
                     )}
                   </div>
                 </th>
@@ -252,11 +256,7 @@ const FileList = () => {
                             }}
                             className='flex items-center justify-center bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 active:bg-blue-800 text-white px-4 py-1 rounded-lg focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition duration-150'
                           >
-                            <span
-                              className={
-                                'material-symbols font-variation-fill text-3xl'
-                              }
-                            >
+                            <span className={'material-symbols-fill text-2xl'}>
                               play_arrow
                             </span>
                           </button>
