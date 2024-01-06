@@ -45,21 +45,30 @@ const Header = ({
         className={getUploadButtonClasses(isUploadDisabled)}
         disabled={isUploadDisabled}
       >
-        Upload
+        <div className='flex items-center'>
+          <span className='material-symbols'>cloud_upload</span>
+          <span className='ml-1'>Upload</span>
+        </div>
       </Button>
       <Button
         onClick={downloadAsJsonl}
         className='ml-1 text-yellow-500 hover:text-yellow-600 active:text-yellow-700 dark:text-yellow-700 dark:hover:text-yellow-600 dark:active:text-yellow-700
         border border-yellow-500 dark:border-yellow-700 hover:border-yellow-600 active:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700'
       >
-        Download
+        <div className='flex items-center'>
+          <span className='material-symbols'>download</span>
+          <span className='ml-1'>Download</span>
+        </div>
       </Button>
       <Button
         onClick={copyToClipboardAsJsonl}
         className='ml-1 text-yellow-500 hover:text-yellow-600 active:text-yellow-700 dark:text-yellow-700 dark:hover:text-yellow-600 dark:active:text-yellow-700
         border border-yellow-500 dark:border-yellow-700 hover:border-yellow-600 active:border-yellow-700 dark:hover:border-yellow-600 dark:active:border-yellow-700'
       >
-        Copy to Clipboard
+        <div className='flex items-center'>
+          <span className='material-symbols'>content_copy</span>
+          <span className='ml-1'>Copy to Clipboard</span>
+        </div>
       </Button>
     </div>
     <div className='flex'>
