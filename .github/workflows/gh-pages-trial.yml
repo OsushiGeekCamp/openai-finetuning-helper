@@ -76,7 +76,7 @@ jobs:
           publish_dir: ./out
           destination_dir: ${{ env.DEPLOY_PATH }}
           keep_files: true
-      
+
       - name: Update deployment status
         uses: bobheadxi/deployments@v1
         with:
