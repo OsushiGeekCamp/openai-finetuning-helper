@@ -20,6 +20,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
+          env: development
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -83,6 +84,7 @@ jobs:
           step: finish
           token: ${{ secrets.GITHUB_TOKEN }}
           env_url: ${{ env.DEPLOY_URL }}
+          env: development
 
       - name: Comment PR with Deploy URL
         uses: actions/github-script@v7
