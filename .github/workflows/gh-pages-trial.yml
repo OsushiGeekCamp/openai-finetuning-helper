@@ -86,6 +86,7 @@ jobs:
           env_url: ${{ env.DEPLOY_URL }}
           env: development
           status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Comment PR with Deploy URL
         uses: actions/github-script@v7
