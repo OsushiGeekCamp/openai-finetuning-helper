@@ -21,32 +21,35 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEBUG_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
       - name: Try merging to debug branch
         run: |
-          git fetch origin
-          git checkout -b debug origin/debug
-          if git merge main --ff-only; then
-            git push origin debug
+          git add remote degug git@github.com:OsushiGeekCamp/openai-finetuning-helper-debug.git
+          git fetch debug
+          git checkout -b debug debug/debug
+          if git merge main; then
+            echo "NEED_MERGE_COMMIT_PR=true" >> $GITHUB_ENV
+            git push degug main
           else
-            git checkout -b merge-main-to-debug
-            if git merge main; then
-              echo "NEED_MERGE_COMMIT_PR=true" >> $GITHUB_ENV
-              git push origin merge-main-to-debug
-            else
-              echo "NEED_CONFLICT_RESOLUTION_PR=true" >> $GITHUB_ENV
-            fi
+            echo "NEED_CONFLICT_RESOLUTION_PR=true" >> $GITHUB_ENV
           fi
 
       - name: Create PR for Merge Commit
         if: env.NEED_MERGE_COMMIT_PR == 'true'
         run: |
-          PR_JSON=$(echo -n '{"head":"merge-main-to-debug", "base":"debug", "title":"Merge main to debug", "body":"Main has been merged into debug with a merge commit."}')
+          PR_JSON=$(echo -n '{"head":"main", "base":"debug", "title":"Merge main to debug", "body":"Main has been merged into debug with a merge commit."}')
           curl \
             -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             -d "$PR_JSON" \
-            https://api.github.com/repos/${{ github.repository }}/pulls
+            https://api.github.com/repos/openai-finetuning-helper-debug/pulls
 
       - name: Create PR for Conflict Resolution
         if: env.NEED_CONFLICT_RESOLUTION_PR == 'true'
@@ -57,4 +60,4 @@ jobs:
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             -d "$PR_JSON" \
-            https://api.github.com/repos/${{ github.repository }}/pulls
+            https://api.github.com/repos/openai-finetuning-helper-debug/pulls
