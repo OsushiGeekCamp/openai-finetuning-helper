@@ -30,7 +30,7 @@ jobs:
 
       - name: Try merging to debug branch
         run: |
-          git add remote degug git@github.com:OsushiGeekCamp/openai-finetuning-helper-debug.git
+          git remote add degug git@github.com:OsushiGeekCamp/openai-finetuning-helper-debug.git
           git fetch debug
           git checkout -b debug debug/debug
           if git merge main; then
