@@ -13,7 +13,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "clsx": "^2.1.0",
+    "clsx": "^2.1.1",
     "js-tiktoken": "^1.0.10",
     "material-symbols": "^0.14.6",
     "next": "14.0.4",
