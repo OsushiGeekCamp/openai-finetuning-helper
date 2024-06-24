@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "js-tiktoken": "^1.0.10",
+    "js-tiktoken": "^1.0.12",
     "material-symbols": "^0.14.6",
     "next": "14.0.4",
     "react": "^18",
