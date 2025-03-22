@@ -11,8 +11,17 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      deployments: write
 
     steps:
+      - name: Start deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: development
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -68,6 +77,16 @@ jobs:
           publish_dir: ./out
           destination_dir: ${{ env.DEPLOY_PATH }}
           keep_files: true
+
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v1
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env_url: ${{ env.DEPLOY_URL }}
+          env: development
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Comment PR with Deploy URL
         uses: actions/github-script@v7
